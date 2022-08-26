@@ -16,6 +16,7 @@
 
 #include "glm.hpp"
 #include "gtc/type_ptr.hpp"
+#include "gtx/string_cast.hpp"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"

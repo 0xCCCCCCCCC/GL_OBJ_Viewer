@@ -50,6 +50,7 @@ vector<string> objname;
 vector<string> objpath;
 vector<vector<float>> objdata;
 
+// 用于预览模型变换的临时变换矩阵temp_trans
 bool use_temp_trans = false;
 glm::mat4 temp_trans;
 
@@ -60,6 +61,8 @@ void Render(void){
     
 }
 
+// 主函数obj数据数组处理函数，于obj_panel中被调用
+// 用于存储读取的obj文件数据、应用用户对模型的变换操作
 void manageData(int objcmd ,int objid, glm::mat4 transmat){
     switch (objcmd) {
         case OBJ_INSERT:
@@ -275,7 +278,7 @@ int main(int argc, char * argv[]){
     
     glfwTerminate();
     return 0;
-    }
+}
 
 //窗口被拖拽时恢复原先大小
 void framebuffer_size_callback(GLFWwindow *window, int width, int height) {

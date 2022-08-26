@@ -12,6 +12,7 @@
 		691EC68528A4FF9100AFE890 /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 691EC68428A4FF9100AFE890 /* glad.c */; };
 		691EC68828A5E68D00AFE890 /* shader.c in Sources */ = {isa = PBXBuildFile; fileRef = 691EC68728A5E68D00AFE890 /* shader.c */; };
 		691EC6C728A9E12100AFE890 /* file_dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 691EC6C528A9E12100AFE890 /* file_dialog.cpp */; };
+		692AC05228B8B6FD000348D2 /* obj_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 692AC05028B8B6FD000348D2 /* obj_loader.cpp */; };
 		6942FAC128AA40AF00373F67 /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6942FAB228AA40AF00373F67 /* imgui.cpp */; };
 		6942FAC228AA40AF00373F67 /* imgui_impl_opengl3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6942FAB528AA40AF00373F67 /* imgui_impl_opengl3.cpp */; };
 		6942FAC328AA40AF00373F67 /* imgui_widgets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6942FAB728AA40AF00373F67 /* imgui_widgets.cpp */; };
@@ -47,6 +48,8 @@
 		691EC68A28A5E69C00AFE890 /* vertex_shader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = vertex_shader.vert; sourceTree = "<group>"; };
 		691EC6C528A9E12100AFE890 /* file_dialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = file_dialog.cpp; sourceTree = "<group>"; };
 		691EC6C628A9E12100AFE890 /* file_dialog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = file_dialog.hpp; sourceTree = "<group>"; };
+		692AC05028B8B6FD000348D2 /* obj_loader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = obj_loader.cpp; sourceTree = "<group>"; };
+		692AC05128B8B6FD000348D2 /* obj_loader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = obj_loader.hpp; sourceTree = "<group>"; };
 		6942FAB228AA40AF00373F67 /* imgui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui.cpp; sourceTree = "<group>"; };
 		6942FAB328AA40AF00373F67 /* imconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imconfig.h; sourceTree = "<group>"; };
 		6942FAB428AA40AF00373F67 /* imgui_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_internal.h; sourceTree = "<group>"; };
@@ -132,13 +135,15 @@
 				6977043C28A4F9B400182425 /* main.cpp */,
 				691EC68A28A5E69C00AFE890 /* vertex_shader.vert */,
 				691EC68628A5E68D00AFE890 /* fragment_shader.frag */,
-				691EC68928A5E69C00AFE890 /* shader.h */,
+				692AC05028B8B6FD000348D2 /* obj_loader.cpp */,
+				692AC05128B8B6FD000348D2 /* obj_loader.hpp */,
 				6942FAC828AA443D00373F67 /* imgui_panel.cpp */,
 				6942FAC928AA443D00373F67 /* imgui_panel.hpp */,
 				6942FACB28AB89B800373F67 /* obj_panel.cpp */,
 				6942FACC28AB89B800373F67 /* obj_panel.hpp */,
 				691EC6C528A9E12100AFE890 /* file_dialog.cpp */,
 				691EC6C628A9E12100AFE890 /* file_dialog.hpp */,
+				691EC68928A5E69C00AFE890 /* shader.h */,
 				691EC68728A5E68D00AFE890 /* shader.c */,
 				691EC68428A4FF9100AFE890 /* glad.c */,
 				6942FAC728AA40EE00373F67 /* imgui */,
@@ -223,6 +228,7 @@
 				691EC6C728A9E12100AFE890 /* file_dialog.cpp in Sources */,
 				6942FAC228AA40AF00373F67 /* imgui_impl_opengl3.cpp in Sources */,
 				6942FACD28AB89B800373F67 /* obj_panel.cpp in Sources */,
+				692AC05228B8B6FD000348D2 /* obj_loader.cpp in Sources */,
 				6942FAC128AA40AF00373F67 /* imgui.cpp in Sources */,
 				6942FAC328AA40AF00373F67 /* imgui_widgets.cpp in Sources */,
 				6942FAC428AA40AF00373F67 /* imgui_draw.cpp in Sources */,

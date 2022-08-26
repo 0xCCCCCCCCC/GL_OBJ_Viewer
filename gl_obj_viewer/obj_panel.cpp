@@ -260,4 +260,5 @@ void ObjPanel::_calc_trans_mat(void){
     _trans_mat = glm::scale(_trans_mat, glm::vec3(_obj_scale, _obj_scale, _obj_scale));
     
     this->obj_trans = _trans_mat;
+    // std::cout<<glm::to_string(this->obj_trans)<<std::endl;
 }

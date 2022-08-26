@@ -1,0 +1,35 @@
+//
+//  obj_loader.hpp
+//  gl_obj_viewer
+//
+//  Created by YNK on 2022/8/26.
+//
+
+#ifndef obj_loader_hpp
+#define obj_loader_hpp
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+
+class Loader{
+private:
+    std::string obj_path;
+    bool has_vn;
+    
+    std::vector<float> data_v;
+    std::vector<float> data_f;
+    std::vector<float> data_vn;
+    
+    bool read_obj_file(void);
+    bool calc_vn(void);
+    bool ovr_vn(void);
+    
+public:
+    Loader(void): obj_path(""), has_vn(false){}
+    bool load(std::string obj_file_path, bool vn_ovr = true);
+    bool get(std::vector<float>* main_data);
+    void clear(void);
+};
+
+#endif /* obj_loader_hpp */
