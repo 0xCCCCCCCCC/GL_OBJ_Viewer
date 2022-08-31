@@ -23,6 +23,7 @@
 		6942FACD28AB89B800373F67 /* obj_panel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6942FACB28AB89B800373F67 /* obj_panel.cpp */; };
 		69514BA128ACBA9C00444FE8 /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 69514BA028ACBA9C00444FE8 /* imgui_demo.cpp */; };
 		6977043D28A4F9B400182425 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6977043C28A4F9B400182425 /* main.cpp */; };
+		6999602B28BF3FC5006815A8 /* obj_data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6999602928BF3FC5006815A8 /* obj_data.cpp */; };
 		69E680F628A4FD4D00B9661C /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69E680F528A4FD4D00B9661C /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
@@ -72,6 +73,8 @@
 		69514BA028ACBA9C00444FE8 /* imgui_demo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_demo.cpp; sourceTree = "<group>"; };
 		6977043928A4F9B400182425 /* gl_obj_viewer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = gl_obj_viewer; sourceTree = BUILT_PRODUCTS_DIR; };
 		6977043C28A4F9B400182425 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		6999602928BF3FC5006815A8 /* obj_data.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = obj_data.cpp; sourceTree = "<group>"; };
+		6999602A28BF3FC5006815A8 /* obj_data.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = obj_data.hpp; sourceTree = "<group>"; };
 		69E680F528A4FD4D00B9661C /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -135,6 +138,8 @@
 				6977043C28A4F9B400182425 /* main.cpp */,
 				691EC68A28A5E69C00AFE890 /* vertex_shader.vert */,
 				691EC68628A5E68D00AFE890 /* fragment_shader.frag */,
+				6999602928BF3FC5006815A8 /* obj_data.cpp */,
+				6999602A28BF3FC5006815A8 /* obj_data.hpp */,
 				692AC05028B8B6FD000348D2 /* obj_loader.cpp */,
 				692AC05128B8B6FD000348D2 /* obj_loader.hpp */,
 				691EC68928A5E69C00AFE890 /* shader.h */,
@@ -229,6 +234,7 @@
 				6977043D28A4F9B400182425 /* main.cpp in Sources */,
 				6942FACA28AA443D00373F67 /* imgui_panel.cpp in Sources */,
 				691EC68828A5E68D00AFE890 /* shader.c in Sources */,
+				6999602B28BF3FC5006815A8 /* obj_data.cpp in Sources */,
 				69514BA128ACBA9C00444FE8 /* imgui_demo.cpp in Sources */,
 				6942FAC528AA40AF00373F67 /* imgui_impl_glfw.cpp in Sources */,
 				691EC68528A4FF9100AFE890 /* glad.c in Sources */,

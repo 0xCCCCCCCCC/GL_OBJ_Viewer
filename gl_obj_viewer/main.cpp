@@ -17,7 +17,8 @@
 
 #include "shader.h"
 #include "imgui_panel.hpp"
-#include "obj_loader.hpp"
+//#include "obj_loader.hpp"
+#include "obj_data.hpp"
 
 #include <vector>
 
@@ -32,8 +33,8 @@ void Render(void);
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 
-void removeData(int objid);
-void manageData(int objcmd ,int objid, glm::mat4 transmat);
+//void removeData(int objid);
+//void manageData(int objcmd ,int objid, glm::mat4 transmat);
 
 /*
 bool enable_mouse = true;
@@ -47,19 +48,19 @@ int obj_selected = 0;
 string objfilepath;
 bool show_file_dialog = false;
 */
+/*
 vector<string> objname;
 vector<string> objpath;
 //vector<vector<float>*> objdata;
 vector<vector<float>*> objdata_v;
 vector<vector<unsigned int>*> objdata_f;
 vector<vector<float>*> objdata_vn;
-
-
-Loader loader;
+*/
+//Loader loader;
 
 // 用于预览模型变换的临时变换矩阵temp_trans
-bool use_temp_trans = false;
-glm::mat4 temp_trans;
+//bool use_temp_trans = false;
+//glm::mat4 temp_trans;
 
 //渲染程序
 void Render(void){
@@ -70,7 +71,7 @@ void Render(void){
 
 // 主函数obj数据数组处理函数，于obj_panel中被调用
 // 用于存储读取的obj文件数据、应用用户对模型的变换操作
-void manageData(int objcmd, int objid, glm::mat4 transmat){
+/*void manageData(int objcmd, int objid, glm::mat4 transmat){
     switch (objcmd) {
         case OBJ_INSERT:
             printf("insert %i\n", objid);
@@ -115,7 +116,7 @@ void manageData(int objcmd, int objid, glm::mat4 transmat){
             printf("?\n");
             break;
     }
-}
+}*/
 
 //imgui设置
 /*
@@ -241,9 +242,10 @@ int main(int argc, char * argv[]){
     ImGui_ImplOpenGL3_Init("#version 330");
     
     ImGuiPanel panel;
-    panel.SaveIn(&objname, &objpath);
-    panel.SetHandler(manageData);
-    //setTargetExt(".obj");
+    //panel.SaveIn(&objname, &objpath);
+    //panel.SetHandler(manageData);
+    panel.SaveIn(getObjName, getObjPath);
+    panel.SetHandler(getHandler);
     
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -290,8 +292,6 @@ int main(int argc, char * argv[]){
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         
-        //printf("%i %i\n", (int)objname.size(), (int)objpath.size());
-        
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -306,6 +306,7 @@ int main(int argc, char * argv[]){
     return 0;
 }
 
+/*
 void removeData(int objid){
     objdata_v[objid]->clear();
     objdata_f[objid]->clear();
@@ -317,6 +318,7 @@ void removeData(int objid){
     objdata_f.erase(objdata_f.begin() + objid);
     objdata_vn.erase(objdata_vn.begin() + objid);
 }
+*/
 
 //窗口被拖拽时恢复原先大小
 void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
