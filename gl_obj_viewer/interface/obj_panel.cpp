@@ -204,7 +204,7 @@ bool ObjPanel::_insert_obj(void){
             objname.push_back(_obj_file_name);
         }
         // 调用主程序中的处理函数，对obj文件数据进行读取、模型展示
-        op(OBJ_INSERT, (int)(save_elsewhere ? objnameew->size() : objname.size()), glm::mat4(0));
+        op(OBJ_INSERT, (int)(save_elsewhere ? objnameew->size() : objname.size()) - 1, glm::mat4(0));
     }
     return true;
 }

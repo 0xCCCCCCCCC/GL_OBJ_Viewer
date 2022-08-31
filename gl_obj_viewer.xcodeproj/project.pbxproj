@@ -137,18 +137,26 @@
 				691EC68628A5E68D00AFE890 /* fragment_shader.frag */,
 				692AC05028B8B6FD000348D2 /* obj_loader.cpp */,
 				692AC05128B8B6FD000348D2 /* obj_loader.hpp */,
+				691EC68928A5E69C00AFE890 /* shader.h */,
+				691EC68728A5E68D00AFE890 /* shader.c */,
+				691EC68428A4FF9100AFE890 /* glad.c */,
+				6999602828BF3C9B006815A8 /* interface */,
+				6942FAC728AA40EE00373F67 /* imgui */,
+			);
+			path = gl_obj_viewer;
+			sourceTree = "<group>";
+		};
+		6999602828BF3C9B006815A8 /* interface */ = {
+			isa = PBXGroup;
+			children = (
 				6942FAC828AA443D00373F67 /* imgui_panel.cpp */,
 				6942FAC928AA443D00373F67 /* imgui_panel.hpp */,
 				6942FACB28AB89B800373F67 /* obj_panel.cpp */,
 				6942FACC28AB89B800373F67 /* obj_panel.hpp */,
 				691EC6C528A9E12100AFE890 /* file_dialog.cpp */,
 				691EC6C628A9E12100AFE890 /* file_dialog.hpp */,
-				691EC68928A5E69C00AFE890 /* shader.h */,
-				691EC68728A5E68D00AFE890 /* shader.c */,
-				691EC68428A4FF9100AFE890 /* glad.c */,
-				6942FAC728AA40EE00373F67 /* imgui */,
 			);
-			path = gl_obj_viewer;
+			path = interface;
 			sourceTree = "<group>";
 		};
 		69E680F428A4FD4D00B9661C /* Frameworks */ = {

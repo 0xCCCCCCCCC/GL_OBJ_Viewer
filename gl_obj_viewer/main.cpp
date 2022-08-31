@@ -17,7 +17,7 @@
 
 #include "shader.h"
 #include "imgui_panel.hpp"
-#include "file_dialog.hpp"
+#include "obj_loader.hpp"
 
 #include <vector>
 
@@ -32,6 +32,7 @@ void Render(void);
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 
+void removeData(int objid);
 void manageData(int objcmd ,int objid, glm::mat4 transmat);
 
 /*
@@ -48,7 +49,13 @@ bool show_file_dialog = false;
 */
 vector<string> objname;
 vector<string> objpath;
-vector<vector<float>> objdata;
+//vector<vector<float>*> objdata;
+vector<vector<float>*> objdata_v;
+vector<vector<unsigned int>*> objdata_f;
+vector<vector<float>*> objdata_vn;
+
+
+Loader loader;
 
 // 用于预览模型变换的临时变换矩阵temp_trans
 bool use_temp_trans = false;
@@ -63,13 +70,32 @@ void Render(void){
 
 // 主函数obj数据数组处理函数，于obj_panel中被调用
 // 用于存储读取的obj文件数据、应用用户对模型的变换操作
-void manageData(int objcmd ,int objid, glm::mat4 transmat){
+void manageData(int objcmd, int objid, glm::mat4 transmat){
     switch (objcmd) {
         case OBJ_INSERT:
             printf("insert %i\n", objid);
+            if(loader.load(objpath[objid])){
+                //objdata.push_back(new vector<float>);
+                //if(loader.get(objdata[objid])){
+                objdata_v.push_back(new vector<float>);
+                objdata_f.push_back(new vector<unsigned int>);
+                objdata_vn.push_back(new vector<float>);
+                if(loader.get(objdata_v[objid], objdata_f[objid], objdata_vn[objid])){
+                    for(int i=0; i<objdata_v[objid]->size(); ++i){
+                        std::cout<<(*objdata_v[objid])[i]<<" ";
+                        if(i%3==2)
+                            std::cout<<std::endl;
+                    }
+                    std::cout<<objdata_v[objid]->size()/3<<std::endl;
+                }else{
+                    printf("failed to get data from %i\n", objid);
+                    removeData(objid);
+                }
+            }
             break;
         case OBJ_REMOVE:
             printf("remove %i\n", objid);
+            removeData(objid);
             break;
         case OBJ_TRANSFORM:
             use_temp_trans = true;
@@ -227,7 +253,7 @@ int main(int argc, char * argv[]){
     Shader shader = shaderCreate("vertex_shader.vert", "fragment_shader.frag");
     
     //添加绘制对象
-    float vertices[]{
+    vector<float> vertices{
         -0.5f, 0.288f, 0.0f,
         0.5f, 0.288f, 0.0f,
         0.0f, -0.577f, 0.0f
@@ -238,7 +264,7 @@ int main(int argc, char * argv[]){
     glGenBuffers(1, &VBO);
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -278,6 +304,18 @@ int main(int argc, char * argv[]){
     
     glfwTerminate();
     return 0;
+}
+
+void removeData(int objid){
+    objdata_v[objid]->clear();
+    objdata_f[objid]->clear();
+    objdata_vn[objid]->clear();
+    free(objdata_v[objid]);
+    free(objdata_f[objid]);
+    free(objdata_vn[objid]);
+    objdata_v.erase(objdata_v.begin() + objid);
+    objdata_f.erase(objdata_f.begin() + objid);
+    objdata_vn.erase(objdata_vn.begin() + objid);
 }
 
 //窗口被拖拽时恢复原先大小
