@@ -34,7 +34,7 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 
 //void removeData(int objid);
-//void manageData(int objcmd ,int objid, glm::mat4 transmat);
+//bool manageData(int objcmd ,int objid, glm::mat4 transmat);
 
 /*
 bool enable_mouse = true;
@@ -71,7 +71,7 @@ void Render(void){
 
 // 主函数obj数据数组处理函数，于obj_panel中被调用
 // 用于存储读取的obj文件数据、应用用户对模型的变换操作
-/*void manageData(int objcmd, int objid, glm::mat4 transmat){
+/*bool manageData(int objcmd, int objid, glm::mat4 transmat){
     switch (objcmd) {
         case OBJ_INSERT:
             printf("insert %i\n", objid);

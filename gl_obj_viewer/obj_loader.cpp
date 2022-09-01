@@ -36,6 +36,7 @@ bool Loader::read_obj_file(void){
         }
         if(!hdl_obj_data(_data)){
             delete []_dline;
+            reader.close();
             this->clear();
             return false;
         }
@@ -43,30 +44,38 @@ bool Loader::read_obj_file(void){
         _data.clear();
         file_cont.clear();
     }
+    reader.close();
+    if(!this->has_vn || data_vn.size() != data_v.size())
+        calc_vn();
     return true;
 }
 
+// 对于read_obj_file读取的不同类型的数据，将其存储于相应的数组中
 bool Loader::hdl_obj_data(const vector<string>& obj_data){
     if(obj_data.size() < 4)
         return false;
     string _data_type = obj_data[0];
+    // 存储顶点坐标数据
     if(_data_type == "v"){
         this->data_v.push_back(std::atof(obj_data[1].c_str()));
         this->data_v.push_back(std::atof(obj_data[2].c_str()));
         this->data_v.push_back(std::atof(obj_data[3].c_str()));
     }else{
+        // 存储三角面片数据
         if(_data_type == "f"){
             this->data_f.push_back(std::atoi(obj_data[1].c_str()));
             this->data_f.push_back(std::atoi(obj_data[2].c_str()));
             this->data_f.push_back(std::atoi(obj_data[3].c_str()));
         }else{
+            // 存储顶点法向量数据
             if(_data_type == "vn"){
                 this->has_vn = true;
                 this->data_vn.push_back(std::atof(obj_data[1].c_str()));
                 this->data_vn.push_back(std::atof(obj_data[2].c_str()));
                 this->data_vn.push_back(std::atof(obj_data[3].c_str()));
             }else{
-                if(_data_type == "vt")
+                // 忽略贴图坐标数据
+                if(_data_type == "vt" || _data_type == "g")
                     return true;
                 else
                     return false;
@@ -77,7 +86,53 @@ bool Loader::hdl_obj_data(const vector<string>& obj_data){
     return true;
 }
 
+bool Loader::calc_vn(void){
+    //TODO: 计算顶点法向量
+    //vector<float> tdata_fn;
+    data_vn = vector<float>(data_v.size(), .0f);
+    for(int fid = 0; fid < data_f.size() / 3; fid++){
+        glm::vec3 vtx_a = get_coord(data_f[fid * 3]);
+        glm::vec3 vtx_b = get_coord(data_f[fid * 3 + 1]);
+        glm::vec3 vtx_c = get_coord(data_f[fid * 3 + 2]);
+        glm::vec3 _fn = glm::normalize(glm::cross(vtx_c - vtx_a, vtx_b - vtx_a));
+        //tdata_fn.push_back(_fn[0]);
+        //tdata_fn.push_back(_fn[1]);
+        //tdata_fn.push_back(_fn[2]);
+        for (int vnvi = 0; vnvi < 3; vnvi++)
+            for (int vnci = 0; vnci < 3; vnci++)
+                data_vn[3 * data_f[fid * 3 + vnvi] + vnci] += _fn[vnci];
+            //data_vn[3 * data_f[fid * 3 + vnvi]] += _fn[0];
+            //data_vn[3 * data_f[fid * 3 + vnvi] + 1] += _fn[1];
+            //data_vn[3 * data_f[fid * 3 + vnvi] + 2] += _fn[2];
+    }
+    //if(tdata_fn.size() != data_f.size())
+    //    return false;
+    data_vn.clear();
+    for (int vid = 0; vid < data_vn.size() / 3; vid++) {
+        glm::vec3 vtx_norm = glm::normalize(glm::vec3(data_vn[vid * 3], data_vn[vid * 3 + 1], data_vn[vid * 3 + 2]));
+        data_vn[vid * 3] = vtx_norm[0];
+        data_vn[vid * 3 + 1] = vtx_norm[1];
+        data_vn[vid * 3 + 2] = vtx_norm[2];
+    }
+    //for(int vid = 0; vid < data_v.size() / 3; vid++){
+    //    for(int coordid)
+    //}
+    return true;
+}
+
 bool Loader::ovr_vn(void){
+    if(has_vn)
+        return true;
+    //if(!calc_vn())
+        //return false;
+    std::fstream writer;
+    writer.open(obj_path.c_str(), std::ios::app | std::ios::out);
+    if(!writer.is_open()){return false;}
+    for(int vnid = 0; vnid < data_vn.size() / 3; vnid++){
+        writer << "vn " <<data_vn[vnid * 3] << " " << data_vn[vnid * 3 + 1]
+            << " " << data_vn[vnid * 3 + 2] << std::endl;
+    }
+    writer.close();
     return true;
 }
 
@@ -100,6 +155,7 @@ bool Loader::load(string obj_file_path, bool vn_ovr){
 }
 
 // 向外部数组main_data写入读取的obj文件数据
+/*
 bool Loader::get(std::vector<float>* main_data){
     if(main_data == NULL){this->clear(); return false;}
     for(float v_coord : this->data_v)
@@ -113,6 +169,7 @@ bool Loader::get(std::vector<float>* main_data){
     this->clear();
     return true;
 }
+*/
 
 bool Loader::get(vector<float> *main_data_v, vector<unsigned int> *main_data_f,
                  vector<float> *main_data_vn) {
@@ -137,4 +194,10 @@ void Loader::clear(void){
     this->data_v.clear();
     this->data_f.clear();
     this->data_vn.clear();
+}
+
+glm::vec3 Loader::get_coord(int vid){
+    if(vid >= data_v.size() / 3)
+        return glm::vec3(1);
+    return glm::vec3(data_v[vid * 3], data_v[vid * 3 + 1], data_v[vid * 3 + 2]);
 }
