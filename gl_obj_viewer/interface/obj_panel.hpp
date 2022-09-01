@@ -40,7 +40,8 @@ private:
 
     FileDialog file_dialog;                                 // 文件选择窗口
     
-    void(*op) (int objcmd ,int objid, glm::mat4 transmat);  // 主程序中objdata数组的处理函数句柄
+    //void(*op) (int objcmd ,int objid, glm::mat4 transmat);  // 主程序中objdata数组的处理函数句柄
+    bool(*op) (int objcmd ,int objid, glm::mat4 transmat);  // 主程序中objdata数组的处理函数句柄
     
     bool save_elsewhere;                                    // 是否将数据存储于外部（为true则存储于外部，为false则存储于类的内部数组）
     std::vector<std::string>* objnameew;                    // 外部（主函数）obj文件名数组指针
@@ -71,7 +72,8 @@ public:
                                                             // 设置外部存储数组的指针
     void SaveIn(std::vector<std::string>* objnameout, std::vector<std::string>* objpathout);
                                                             // 传入主函数中处理函数句柄
-    void SetHandler(void(*op) (int objcmd ,int objid, glm::mat4 transmat));
+    //void SetHandler(void(*op) (int objcmd ,int objid, glm::mat4 transmat));
+    void SetHandler(bool(*op) (int objcmd ,int objid, glm::mat4 transmat));
 };
 
 #endif /* obj_panel_hpp */

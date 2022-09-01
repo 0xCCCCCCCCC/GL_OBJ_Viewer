@@ -64,6 +64,9 @@ void ObjPanel::Panel(void){
     ImGui::SameLine(0, 5);
     // 从场景中删除选择的物体
     if(ImGui::Button("-", ImVec2(25, 25))){
+        if(obj_selected > 0 &&
+           obj_selected == (save_elsewhere ? (int)objnameew->size() : (int)objname.size()) - 1)
+            obj_selected -= 1;
         _remove_obj();
     }
     
@@ -166,7 +169,13 @@ void ObjPanel::SaveIn(vector<string> *objnameout, vector<string> *objpathout){
     save_elsewhere = true;
 }
 
+/*
 void ObjPanel::SetHandler(void(*op) (int objcmd ,int objid, glm::mat4 transmat)){
+    this->op = op;
+}
+*/
+
+void ObjPanel::SetHandler(bool(*op) (int objcmd ,int objid, glm::mat4 transmat)){
     this->op = op;
 }
 
@@ -204,7 +213,18 @@ bool ObjPanel::_insert_obj(void){
             objname.push_back(_obj_file_name);
         }
         // 调用主程序中的处理函数，对obj文件数据进行读取、模型展示
-        op(OBJ_INSERT, (int)(save_elsewhere ? objnameew->size() : objname.size()) - 1, glm::mat4(0));
+        // 若读取失败则删除对应文件名、文件路径数据
+        if(!op(OBJ_INSERT, (int)(save_elsewhere ? objnameew->size() : objname.size()) - 1, glm::mat4(0))){
+            if(save_elsewhere){
+                this->objnameew->erase(this->objnameew->begin() + obj_selected);
+                this->objpathew->erase(this->objpathew->begin() + obj_selected);
+            }
+            else{
+                this->objname.erase(this->objname.begin() + obj_selected);
+                this->objpath.erase(this->objpath.begin() + obj_selected);
+            }
+            return false;
+        }
     }
     return true;
 }

@@ -34,8 +34,11 @@ bool Loader::read_obj_file(void){
             _data.push_back(_line_data);
             _line_data = strtok(NULL, " ");
         }
-        if(!hdl_obj_data(_data))
+        if(!hdl_obj_data(_data)){
+            delete []_dline;
+            this->clear();
             return false;
+        }
         delete []_dline;
         _data.clear();
         file_cont.clear();
@@ -63,7 +66,10 @@ bool Loader::hdl_obj_data(const vector<string>& obj_data){
                 this->data_vn.push_back(std::atof(obj_data[2].c_str()));
                 this->data_vn.push_back(std::atof(obj_data[3].c_str()));
             }else{
-                return false;
+                if(_data_type == "vt")
+                    return true;
+                else
+                    return false;
             }
         }
     }
@@ -87,8 +93,10 @@ bool Loader::load(string obj_file_path, bool vn_ovr){
         else
             return true;
     }
-    else
+    else{
+        this->clear();
         return false;
+    }
 }
 
 // 向外部数组main_data写入读取的obj文件数据

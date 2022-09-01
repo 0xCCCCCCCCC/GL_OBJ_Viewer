@@ -31,7 +31,7 @@ extern bool _data_use_temp_trans;
 extern glm::mat4 _data_temp_trans;
 
 void _data_removeData(int objid);
-void _data_manageData(int objcmd ,int objid, glm::mat4 transmat);
+bool _data_manageData(int objcmd ,int objid, glm::mat4 transmat);
 
 #define getObjPath (&(_data_objpath))
 #define getObjName (&(_data_objname))

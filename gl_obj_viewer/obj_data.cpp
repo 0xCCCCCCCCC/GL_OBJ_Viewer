@@ -36,15 +36,18 @@ void _data_removeData(int objid){
 
 // 主函数obj数据数组处理函数，于obj_panel中被调用
 // 用于存储读取的obj文件数据、应用用户对模型的变换操作
-void _data_manageData(int objcmd, int objid, glm::mat4 transmat){
+bool _data_manageData(int objcmd, int objid, glm::mat4 transmat){
     switch (objcmd) {
         case OBJ_INSERT:
-            printf("insert %i\n", objid);
+            // 插入obj文件
+            // 按照obj文件路径读取obj文件的内容
             if(_data_loader.load(_data_objpath[objid])){
+                // 读取成功后获取读取的obj文件数据并存储于3个数组中
                 _data_objdata_v.push_back(new vector<float>);
                 _data_objdata_f.push_back(new vector<unsigned int>);
                 _data_objdata_vn.push_back(new vector<float>);
                 if(_data_loader.get(_data_objdata_v[objid], _data_objdata_f[objid], _data_objdata_vn[objid])){
+                    printf("insert %i\n", objid);
                     /*
                     for(int i=0; i<_data_objdata_v[objid]->size(); ++i){
                         std::cout<<(*_data_objdata_v[objid])[i]<<" ";
@@ -53,9 +56,17 @@ void _data_manageData(int objcmd, int objid, glm::mat4 transmat){
                     }*/
                     std::cout<<_data_objdata_v[objid]->size()/3<<std::endl;
                 }else{
-                    printf("failed to get data from %i\n", objid);
+                    // 获取obj文件数据失败则清除先前创建的用于存储相应obj文件数据的数组
+                    fprintf(stderr, "failed to get data from %i\n", objid);
                     _data_removeData(objid);
+                    return false;
                 }
+            }else{
+                // 读取obj文件失败则在文件名以及文件路径数组中删除该文件的数据
+                //_data_objpath.erase(_data_objpath.begin() + objid);
+                //_data_objname.erase(_data_objname.begin() + objid);
+                fprintf(stderr, "invalid format!\n");
+                return false;
             }
             break;
         case OBJ_REMOVE:
@@ -80,4 +91,5 @@ void _data_manageData(int objcmd, int objid, glm::mat4 transmat){
             printf("?\n");
             break;
     }
+    return true;
 }

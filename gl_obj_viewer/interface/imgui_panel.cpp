@@ -188,7 +188,16 @@ void ImGuiPanel::SaveIn(vector<string>* objnamemain, vector<string>* objpathmain
 }
 
 // 将主程序中的objdata数组处理函数句柄传入ObjPanel中以便调用
+/*
 bool ImGuiPanel::SetHandler(void(*op) (int objcmd ,int objid, glm::mat4 transmat)){
+    if(op == NULL)
+        return false;
+    obj_panel.SetHandler(op);
+    return true;
+}
+*/
+
+bool ImGuiPanel::SetHandler(bool(*op) (int objcmd ,int objid, glm::mat4 transmat)){
     if(op == NULL)
         return false;
     obj_panel.SetHandler(op);
