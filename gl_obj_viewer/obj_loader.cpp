@@ -53,7 +53,7 @@ bool Loader::read_obj_file(void){
 
 // 对于read_obj_file读取的不同类型的数据，将其存储于相应的数组中
 bool Loader::hdl_obj_data(const vector<string>& obj_data){
-    if(obj_data.size() < 4)
+    if(obj_data.size() < 2)
         return false;
     string _data_type = obj_data[0];
     // 存储顶点坐标数据
@@ -64,9 +64,15 @@ bool Loader::hdl_obj_data(const vector<string>& obj_data){
     }else{
         // 存储三角面片数据
         if(_data_type == "f"){
-            this->data_f.push_back(std::atoi(obj_data[1].c_str()) - 1);
-            this->data_f.push_back(std::atoi(obj_data[2].c_str()) - 1);
-            this->data_f.push_back(std::atoi(obj_data[3].c_str()) - 1);
+            if(((int)obj_data[1].find("/"))>0){
+                this->data_f.push_back(std::atoi((obj_data[1].substr(0, obj_data[1].find("/"))).c_str()) - 1);
+                this->data_f.push_back(std::atoi((obj_data[2].substr(0, obj_data[2].find("/"))).c_str()) - 1);
+                this->data_f.push_back(std::atoi((obj_data[3].substr(0, obj_data[3].find("/"))).c_str()) - 1);
+            }else{
+                this->data_f.push_back(std::atoi(obj_data[1].c_str()) - 1);
+                this->data_f.push_back(std::atoi(obj_data[2].c_str()) - 1);
+                this->data_f.push_back(std::atoi(obj_data[3].c_str()) - 1);
+            }
         }else{
             // 存储顶点法向量数据
             if(_data_type == "vn"){
@@ -76,7 +82,7 @@ bool Loader::hdl_obj_data(const vector<string>& obj_data){
                 this->data_vn.push_back(std::atof(obj_data[3].c_str()));
             }else{
                 // 忽略贴图坐标数据
-                if(_data_type == "vt" || _data_type == "g")
+                if(_data_type == "vt" || _data_type == "g" || _data_type == "o" || _data_type == "s")
                     return true;
                 else
                     return false;
@@ -98,20 +104,11 @@ bool Loader::calc_vn(void){
         glm::vec3 vtx_c = get_coord(data_f[fid * 3 + 2]);
         // 计算面的法向量
         glm::vec3 _fn = glm::normalize(glm::cross(vtx_c - vtx_a, vtx_b - vtx_a));
-        //tdata_fn.push_back(_fn[0]);
-        //tdata_fn.push_back(_fn[1]);
-        //tdata_fn.push_back(_fn[2]);
         // 将面的法向量累加到该面的3个顶点的法向量
         for (int vnvi = 0; vnvi < 3; vnvi++)
             for (int vnci = 0; vnci < 3; vnci++)
                 data_vn[3 * data_f[fid * 3 + vnvi] + vnci] += _fn[vnci];
-            //data_vn[3 * data_f[fid * 3 + vnvi]] += _fn[0];
-            //data_vn[3 * data_f[fid * 3 + vnvi] + 1] += _fn[1];
-            //data_vn[3 * data_f[fid * 3 + vnvi] + 2] += _fn[2];
     }
-    /*if(tdata_fn.size() != data_f.size())
-    //    return false;
-    data_vn.clear();*/
     // 将所有顶点法向量标准化
     for (int vid = 0; vid < data_vn.size() / 3; vid++) {
         glm::vec3 vtx_norm = glm::normalize(glm::vec3(data_vn[vid * 3], data_vn[vid * 3 + 1], data_vn[vid * 3 + 2]));
@@ -119,9 +116,6 @@ bool Loader::calc_vn(void){
         data_vn[vid * 3 + 1] = vtx_norm[1];
         data_vn[vid * 3 + 2] = vtx_norm[2];
     }
-    //for(int vid = 0; vid < data_v.size() / 3; vid++){
-    //    for(int coordid)
-    //}
     return true;
 }
 
@@ -134,11 +128,21 @@ bool Loader::ovr_vn(void){
         //return false;
     // 将calc_vn函数计算所得的顶点法向量写入obj文件中
     std::fstream writer;
-    writer.open(obj_path.c_str(), std::ios::app | std::ios::out);
+    //writer.open(obj_path.c_str(), std::ios::app | std::ios::out);
+    writer.open(obj_path.c_str(), std::ios::out);
     if(!writer.is_open()){return false;}
+    for(int vid = 0; vid < data_v.size() / 3; vid++){
+        writer << "v " <<data_v[vid * 3] << " " << data_v[vid * 3 + 1]
+            << " " << data_v[vid * 3 + 2] << std::endl;
+    }
     for(int vnid = 0; vnid < data_vn.size() / 3; vnid++){
         writer << "vn " <<data_vn[vnid * 3] << " " << data_vn[vnid * 3 + 1]
             << " " << data_vn[vnid * 3 + 2] << std::endl;
+    }
+    for(int fid = 0; fid < data_f.size() / 3; fid++){
+        writer << "f " << data_f[fid * 3] + 1 << "//" << data_f[fid * 3] + 1
+            << " " << data_f[fid * 3 + 1] + 1 << "//" << data_f[fid * 3 + 1] + 1
+            << " " << data_f[fid * 3 + 2] + 1 << "//" << data_f[fid * 3 + 2] + 1 << std::endl;
     }
     writer.close();
     return true;
@@ -161,23 +165,6 @@ bool Loader::load(string obj_file_path, bool vn_ovr){
         return false;
     }
 }
-
-// 向外部数组main_data写入读取的obj文件数据
-/*
-bool Loader::get(std::vector<float>* main_data){
-    if(main_data == NULL){this->clear(); return false;}
-    for(float v_coord : this->data_v)
-        main_data->push_back(v_coord);
-    // TODO: 写入面f与顶点法向量vn数据
-    for (unsigned int f_id : this->data_f)
-        main_data->push_back((float)f_id);
-    if (this->data_vn.size() > 0)
-        for (float v_norm : this->data_vn)
-            main_data->push_back(v_norm);
-    this->clear();
-    return true;
-}
-*/
 
 // 获取obj文件的顶点坐标、三角面片、顶点法向量数据
 bool Loader::get(vector<float> *main_data_v, vector<unsigned int> *main_data_f,

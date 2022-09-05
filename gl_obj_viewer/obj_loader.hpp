@@ -34,7 +34,6 @@ private:
 public:
     Loader(void): obj_path(""), has_vn(false){}
     bool load(std::string obj_file_path, bool vn_ovr = true);
-    //bool get(std::vector<float>* main_data);
     bool get(std::vector<float> *main_data_v, std::vector<unsigned int> *main_data_f,
              std::vector<float> *main_data_vn);
     void clear(void);

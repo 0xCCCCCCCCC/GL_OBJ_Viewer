@@ -22,19 +22,13 @@
 #include "file_dialog.hpp"
 #include "obj_panel.hpp"
 
+#include "camera.h"
+
 class ImGuiPanel{
 private:
-    /*
-    int obj_selected;
-    std::string obj_file_path;
-    bool show_file_dialog;
-     */
     float scale;
-    
-    //FileDialog file_dialog;
+    Camera camera;
     ObjPanel obj_panel;
-    
-    //bool _if_dup(std::string objname);
 
 public:
     bool enable_mouse;
@@ -51,11 +45,6 @@ public:
     float right;
 
     // obj文件名称、绝对路径、顶点参数数组
-    /*
-    std::vector<std::string> objname;
-    std::vector<std::string> objpath;
-    std::vector<std::vector<float>> objdata;
-     */
     
     ImGuiPanel(void);
     void Panel(void);

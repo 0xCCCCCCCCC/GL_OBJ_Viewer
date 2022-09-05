@@ -87,32 +87,7 @@ void ImGuiPanel::Panel(void){
         }
     }
     // obj文件列表，添加、移除obj文件，对obj文件进行变换操作
-    // TODO: 可能单独设置一个imgui窗口
-    /*
-    if(ImGui::TreeNode("Objects")){
-        // 向长径比中添加obj文件
-        ImGui::Text("insert obj");ImGui::SameLine();
-        if(ImGui::Button("insert")){
-            //show_file_dialog = true;
-            file_dialog.display();
-        }
-        // 场景中显示的obj文件列表
-        ImGui::Text("obj list");
-        if (ImGui::BeginListBox("##obj list")) {
-            for (int i = 0; i < objname.size(); ++i) {
-                const bool isSelected = (obj_selected == i);
-                if (ImGui::Selectable(objname[i].c_str(), isSelected)) {
-                    obj_selected = i;
-                }
-                if (isSelected) {
-                    ImGui::SetItemDefaultFocus();
-                }
-            }
-            ImGui::EndListBox();
-        }
-        ImGui::TreePop();
-    }
-     */
+
     // 其他，包括设置是否可以通过鼠标进行变换、重置场景变换等
     if(ImGui::CollapsingHeader("Others")){
         ImGui::Checkbox("enable mouse control", &enable_mouse);

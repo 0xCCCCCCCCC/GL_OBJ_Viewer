@@ -113,9 +113,14 @@ void _data_updateLocal(void){
         for(int vid = 0; vid<_data_objdata_v[objid]->size(); vid++)
             _data_local_v.push_back((*(_data_objdata_v[objid]))[vid]);
     _data_local_f.clear();
-    for(int objid = 0; objid<_data_objdata_f.size(); objid++)
+    
+    unsigned int fid_start = 0;
+    for(int objid = 0; objid<_data_objdata_f.size(); objid++){
+        if(objid > 0)
+            fid_start += _data_objdata_v[objid - 1]->size() / 3;
         for(int fid = 0; fid<_data_objdata_f[objid]->size(); fid++)
-            _data_local_f.push_back((*(_data_objdata_f[objid]))[fid]);
+            _data_local_f.push_back((*(_data_objdata_f[objid]))[fid] + fid_start);
+    }
     _data_local_vn.clear();
     for(int objid = 0; objid<_data_objdata_vn.size(); objid++)
         for(int vnid = 0; vnid<_data_objdata_vn[objid]->size(); vnid++)

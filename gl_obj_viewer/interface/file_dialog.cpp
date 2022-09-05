@@ -26,6 +26,7 @@ FileDialog::FileDialog(string title){
 
 FileDialog::~FileDialog(){}
 
+// 判断是否为隐藏文件，即文件名是否以.开头；若为隐藏文件则返回true
 bool FileDialog::_is_hidden(const string &filename){
     string __filename = filename;
     __filename.erase(0, __filename.find_first_not_of(" "));
@@ -33,12 +34,14 @@ bool FileDialog::_is_hidden(const string &filename){
     return (__filename[0] == '.') && (__filename[1] != '.');
 }
 
+// 判断是否为文件夹
 bool FileDialog::_is_dir(const string &filename){
     string abspath = _cwd + string("/") + filename;
     struct stat buffer;
     return (stat(abspath.c_str(), &buffer) == 0 && S_ISDIR(buffer.st_mode));
 }
 
+// 判断文件格式是否符合，即文件后缀名是否与先前设定的后缀名一致
 bool FileDialog::_is_compl_file(const string &filepath){
     if(_extls[0] == "*")
         return true;
@@ -63,6 +66,7 @@ bool FileDialog::_is_compl_file(const string &filepath){
     return false;
 }
 
+// 获取路径dp下的所有文件名（除去隐藏文件与当前路径(.)）
 bool FileDialog::_getFileList(const char* dp){
     _filels.clear();
 #if defined(__APPLE__) || defined(__linux__)
@@ -85,6 +89,7 @@ bool FileDialog::_getFileList(const char* dp){
 #endif
 }
 
+// 切换文件对话框的当前路径（工作路径），使用相对路径
 void FileDialog::_switch_cwd(const string &dirname){
     if(!_is_dir(dirname))
         return;
@@ -106,6 +111,7 @@ void FileDialog::_switch_cwd(const string &dirname){
     }
 }
 
+// 与上一个功能一致，但是使用绝对路径
 void FileDialog::_switch_cwd_abs(const string &dirname){
     //if(_is_dir(dirname)){
         strncpy(_cwd, dirname.c_str(), dirname.length() + 1);
@@ -113,6 +119,7 @@ void FileDialog::_switch_cwd_abs(const string &dirname){
     //}
 }
 
+// 更新当前工作路径
 void FileDialog::_updt_cwdls(void){
     _cwdls.clear();
     char __cwd[100];
@@ -128,7 +135,7 @@ void FileDialog::_updt_cwdls(void){
     }
 }
 
-
+// 显示文件对话框，并返回选择的文件绝对路径
 string FileDialog::get(std::string* obj_name){
     string file_path = "";
     

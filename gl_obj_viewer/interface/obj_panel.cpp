@@ -64,10 +64,10 @@ void ObjPanel::Panel(void){
     ImGui::SameLine(0, 5);
     // 从场景中删除选择的物体
     if(ImGui::Button("-", ImVec2(25, 25))){
-        if(obj_selected > 0 &&
-           obj_selected == (save_elsewhere ? (int)objnameew->size() : (int)objname.size()) - 1)
-            obj_selected -= 1;
         _remove_obj();
+        if(obj_selected > 0 &&
+           obj_selected >= (save_elsewhere ? (int)objnameew->size() : (int)objname.size()) - 1)
+            obj_selected -= 1;
     }
     
     if(obj_trans != glm::mat4(1))
@@ -136,30 +136,6 @@ void ObjPanel::Panel(void){
     // 显示FileDlg，调用函数添加obj文件数据
     if(file_dialog.ifDisplay()){
         _insert_obj();
-        /*
-        string objfilename;
-        obj_file_path = file_dialog.get(&objfilename);
-        if (obj_file_path != "") {
-            if(_if_dup(objfilename)){
-                string _renamed_ofn = objfilename + string("(1)");
-                int _sn_index = 2;
-                while(_if_dup(_renamed_ofn)){
-                    _renamed_ofn = objfilename + string("(") + std::to_string(_sn_index) + string(")");
-                    _sn_index++;
-                }
-                objfilename = _renamed_ofn;
-            }
-            if(save_elsewhere){
-                objpathew->push_back(obj_file_path);
-                objnameew->push_back(objfilename);
-            }
-            else{
-                objpath.push_back(obj_file_path);
-                objname.push_back(objfilename);
-            }
-            op(OBJ_INSERT, (int)(save_elsewhere ? objnameew->size() : objname.size()), glm::mat4(0));
-        }
-        */
     }
 }
 
