@@ -24,6 +24,7 @@
 		69514BA128ACBA9C00444FE8 /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 69514BA028ACBA9C00444FE8 /* imgui_demo.cpp */; };
 		6977043D28A4F9B400182425 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6977043C28A4F9B400182425 /* main.cpp */; };
 		6999602B28BF3FC5006815A8 /* obj_data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6999602928BF3FC5006815A8 /* obj_data.cpp */; };
+		6999602F28C5F3E1006815A8 /* camera2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6999602D28C5F3E1006815A8 /* camera2.cpp */; };
 		69E680F628A4FD4D00B9661C /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69E680F528A4FD4D00B9661C /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
@@ -75,7 +76,8 @@
 		6977043C28A4F9B400182425 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		6999602928BF3FC5006815A8 /* obj_data.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = obj_data.cpp; sourceTree = "<group>"; };
 		6999602A28BF3FC5006815A8 /* obj_data.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = obj_data.hpp; sourceTree = "<group>"; };
-		6999602C28C5D7C4006815A8 /* camera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
+		6999602D28C5F3E1006815A8 /* camera2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = camera2.cpp; sourceTree = "<group>"; };
+		6999602E28C5F3E1006815A8 /* camera2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = camera2.hpp; sourceTree = "<group>"; };
 		69E680F528A4FD4D00B9661C /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -139,7 +141,8 @@
 				6977043C28A4F9B400182425 /* main.cpp */,
 				691EC68A28A5E69C00AFE890 /* vertex_shader.vert */,
 				691EC68628A5E68D00AFE890 /* fragment_shader.frag */,
-				6999602C28C5D7C4006815A8 /* camera.h */,
+				6999602D28C5F3E1006815A8 /* camera2.cpp */,
+				6999602E28C5F3E1006815A8 /* camera2.hpp */,
 				6999602928BF3FC5006815A8 /* obj_data.cpp */,
 				6999602A28BF3FC5006815A8 /* obj_data.hpp */,
 				692AC05028B8B6FD000348D2 /* obj_loader.cpp */,
@@ -240,6 +243,7 @@
 				69514BA128ACBA9C00444FE8 /* imgui_demo.cpp in Sources */,
 				6942FAC528AA40AF00373F67 /* imgui_impl_glfw.cpp in Sources */,
 				691EC68528A4FF9100AFE890 /* glad.c in Sources */,
+				6999602F28C5F3E1006815A8 /* camera2.cpp in Sources */,
 				6942FAC628AA40AF00373F67 /* imgui_tables.cpp in Sources */,
 				691EC6C728A9E12100AFE890 /* file_dialog.cpp in Sources */,
 				6942FAC228AA40AF00373F67 /* imgui_impl_opengl3.cpp in Sources */,

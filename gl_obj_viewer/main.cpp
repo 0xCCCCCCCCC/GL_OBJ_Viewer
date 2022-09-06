@@ -177,6 +177,7 @@ int main(int argc, char * argv[]){
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+    clearObjData();
     
     glfwTerminate();
     return 0;

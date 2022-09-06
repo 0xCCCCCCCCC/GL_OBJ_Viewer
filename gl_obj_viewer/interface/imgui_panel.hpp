@@ -22,13 +22,15 @@
 #include "file_dialog.hpp"
 #include "obj_panel.hpp"
 
-#include "camera.h"
+#include "camera2.h"
 
 class ImGuiPanel{
 private:
     float scale;
     Camera camera;
     ObjPanel obj_panel;
+    
+    void setCamera(void);
 
 public:
     bool enable_mouse;

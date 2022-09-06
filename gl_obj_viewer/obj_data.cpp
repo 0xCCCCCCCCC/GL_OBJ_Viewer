@@ -127,3 +127,10 @@ void _data_updateLocal(void){
             _data_local_vn.push_back((*(_data_objdata_vn[objid]))[vnid]);
     _local_pt_cnt = (unsigned int)_data_local_f.size();
 }
+
+void _data_clearAll(void){
+    int objid = (int)_data_objname.size() - 1;
+    while(objid >= 0){
+        _data_removeData(objid--);
+    }
+}

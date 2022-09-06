@@ -39,6 +39,7 @@ extern unsigned int _local_pt_cnt;
 void _data_removeData(int objid);
 bool _data_manageData(int objcmd ,int objid, glm::mat4 transmat);
 void _data_updateLocal(void);
+void _data_clearAll(void);
 
 #define getObjPath (&(_data_objpath))
 #define getObjName (&(_data_objname))
@@ -60,5 +61,7 @@ void _data_updateLocal(void);
 #define getLocalPtCount ((unsigned int)(_local_pt_cnt))
 
 #define getHandler (_data_manageData)
+
+#define clearObjData _data_clearAll
 
 #endif /* obj_data_hpp */
