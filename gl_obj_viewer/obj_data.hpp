@@ -26,7 +26,7 @@ extern std::vector<std::vector<float>*> _data_objdata_vn;
 
 extern std::vector<float> _data_local_v;
 extern std::vector<unsigned int> _data_local_f;
-extern std::vector<float> _data_local_vn;
+//extern std::vector<float> _data_local_vn;
 
 extern Loader _data_loader;
 
@@ -56,8 +56,8 @@ void _data_clearAll(void);
 #define getLocalVtxPtr (&(_data_local_v[0]))
 #define getLocalIndexSize ((_data_local_f.size()) * sizeof(unsigned int))
 #define getLocalIndexPtr (&(_data_local_f[0]))
-#define getLocalVNSize ((_data_local_vn.size()) * sizeof(float))
-#define getLocalVNPtr (&(_data_local_vn[0]))
+//#define getLocalVNSize ((_data_local_vn.size()) * sizeof(float))
+//#define getLocalVNPtr (&(_data_local_vn[0]))
 #define getLocalPtCount ((unsigned int)(_local_pt_cnt))
 
 #define getHandler (_data_manageData)

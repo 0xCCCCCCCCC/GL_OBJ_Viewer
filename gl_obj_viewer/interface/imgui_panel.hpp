@@ -22,12 +22,12 @@
 #include "file_dialog.hpp"
 #include "obj_panel.hpp"
 
-#include "camera2.h"
+#include "camera2.hpp"
 
 class ImGuiPanel{
 private:
     float scale;
-    Camera camera;
+    //Camera camera;
     ObjPanel obj_panel;
     
     void setCamera(void);

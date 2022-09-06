@@ -124,7 +124,11 @@ void FileDialog::_updt_cwdls(void){
     _cwdls.clear();
     char __cwd[100];
     strcpy(__cwd, _cwd);
+#if defined(__APPLE__) || defined(__linux__)
     const char s[2] = "/";
+#elif defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    const char s[2] = "\\";
+#endif
     char *token;
 
     token = strtok(__cwd, s);

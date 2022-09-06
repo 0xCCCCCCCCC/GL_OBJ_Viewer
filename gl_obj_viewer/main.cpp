@@ -114,8 +114,12 @@ int main(int argc, char * argv[]){
     glBufferData(GL_ARRAY_BUFFER, getLocalVtxSize, getLocalVtxPtr, GL_STATIC_DRAW);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, getLocalIndexSize, getLocalIndexPtr, GL_STATIC_DRAW);
 #endif
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+    //glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -123,13 +127,18 @@ int main(int argc, char * argv[]){
     // 场景中当前Vertex的数量，用于判断是否新增obj模型
     unsigned int local_pt_cnt = 0;
     
+    //glEnable(GL_CULL_FACE);
+    // 开启深度测试
+    glEnable(GL_DEPTH_TEST);
+    
     //启动OpenGL窗口
     while (!glfwWindowShouldClose(window)) {
         panel.Panel();
         glPolygonMode(GL_FRONT_AND_BACK, panel.display_mode);
         //Render();
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClearColor(0.17f, 0.17f, 0.17f, 1.0f);
+        //glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         processInput(window);
         
 #ifdef TEST_OBJ
@@ -140,8 +149,8 @@ int main(int argc, char * argv[]){
             glBufferData(GL_ARRAY_BUFFER, getLocalVtxSize, getLocalVtxPtr, GL_STATIC_DRAW);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, getLocalIndexSize, getLocalIndexPtr, GL_STATIC_DRAW);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-            glEnableVertexAttribArray(0);
+            //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+            //glEnableVertexAttribArray(0);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             glBindVertexArray(0);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

@@ -19,7 +19,7 @@ vector<vector<float>*> _data_objdata_vn;
 
 vector<float> _data_local_v;
 vector<unsigned int> _data_local_f;
-vector<float> _data_local_vn;
+//vector<float> _data_local_vn;
 
 Loader _data_loader;
 
@@ -108,10 +108,25 @@ bool _data_manageData(int objcmd, int objid, glm::mat4 transmat){
 
 void _data_updateLocal(void){
     _local_pt_cnt = 0;
+    /*
     _data_local_v.clear();
     for(int objid = 0; objid<_data_objdata_v.size(); objid++)
         for(int vid = 0; vid<_data_objdata_v[objid]->size(); vid++)
             _data_local_v.push_back((*(_data_objdata_v[objid]))[vid]);
+    _data_local_f.clear();
+     */
+    
+    _data_local_v.clear();
+    for(int objid = 0; objid<_data_objdata_v.size(); objid++){
+        for(int vid = 0; vid<_data_objdata_v[objid]->size() / 3; vid++ ){
+            _data_local_v.push_back((*(_data_objdata_v[objid]))[3 * vid]);
+            _data_local_v.push_back((*(_data_objdata_v[objid]))[3 * vid + 1]);
+            _data_local_v.push_back((*(_data_objdata_v[objid]))[3 * vid + 2]);
+            _data_local_v.push_back((*(_data_objdata_vn[objid]))[3 * vid]);
+            _data_local_v.push_back((*(_data_objdata_vn[objid]))[3 * vid + 1]);
+            _data_local_v.push_back((*(_data_objdata_vn[objid]))[3 * vid + 2]);
+        }
+    }
     _data_local_f.clear();
     
     unsigned int fid_start = 0;
@@ -121,10 +136,12 @@ void _data_updateLocal(void){
         for(int fid = 0; fid<_data_objdata_f[objid]->size(); fid++)
             _data_local_f.push_back((*(_data_objdata_f[objid]))[fid] + fid_start);
     }
+    /*
     _data_local_vn.clear();
     for(int objid = 0; objid<_data_objdata_vn.size(); objid++)
         for(int vnid = 0; vnid<_data_objdata_vn[objid]->size(); vnid++)
             _data_local_vn.push_back((*(_data_objdata_vn[objid]))[vnid]);
+     */
     _local_pt_cnt = (unsigned int)_data_local_f.size();
 }
 
