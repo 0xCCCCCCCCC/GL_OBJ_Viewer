@@ -27,10 +27,10 @@
 class ImGuiPanel{
 private:
     float scale;
-    //Camera camera;
+    Camera camera;
     ObjPanel obj_panel;
     
-    void setCamera(void);
+    //void setCamera(void);
 
 public:
     bool enable_mouse;
@@ -55,7 +55,7 @@ public:
     void SaveIn(std::vector<std::string>* objnamemain, std::vector<std::string>* objpathmain);
     
     //bool SetHandler(void(*op) (int objcmd ,int objid, glm::mat4 transmat));
-    bool SetHandler(bool(*op) (int objcmd ,int objid, glm::mat4 transmat));
+    bool SetHandler(bool(*op) (int objcmd, int objid, glm::mat4 transmat));
 };
 
 #endif /* imgui_panel_hpp */

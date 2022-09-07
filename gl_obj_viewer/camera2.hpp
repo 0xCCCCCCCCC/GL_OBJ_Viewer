@@ -38,12 +38,48 @@ private:
     float* transFront;
     float* transUp;
     float* transRight;
+    
+    glm::vec3 OriginPos;
 
 public:
 
+    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f)){
+        Position    = position;
+        WorldUp     = up;
+        Yaw     = NULL;
+        Pitch   = NULL;
+        Roll    = NULL;
+        Zoom    = NULL;
+        transFront  = NULL;
+        transUp     = NULL;
+        transRight  = NULL;
+        OriginPos   = position;
+        if(position == glm::vec3(.0f, .0f, .0f))
+            Front = glm::vec3(0.0f, 0.0f, -1.0f);
+        else
+            Front = position;
+    }
+    
+    Camera(float posX, float posY, float posZ, float upX, float upY, float upZ){
+        Position    = glm::vec3(posX, posY, posZ);
+        WorldUp     = glm::vec3(upX, upY, upZ);
+        Yaw     = NULL;
+        Pitch   = NULL;
+        Roll    = NULL;
+        Zoom    = NULL;
+        transFront  = NULL;
+        transUp     = NULL;
+        transRight  = NULL;
+        OriginPos   = Position;
+        if(Position == glm::vec3(.0f, .0f, .0f))
+            Front = glm::vec3(0.0f, 0.0f, -1.0f);
+        else
+            Front = Position;
+    }
+    
     // constructor with vectors
-    Camera(float* yaw, float* pitch, float* roll, float* zoom,
-           glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f))
+    Camera(float* yaw, float* pitch, float* roll, float* zoom, float* transfront, float* transup, float* transright,
+           glm::vec3 position = glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f))
     : Front(glm::vec3(0.0f, 0.0f, -1.0f))
     {
         Position = position;
@@ -52,12 +88,16 @@ public:
         Pitch = pitch;
         Roll = roll;
         Zoom = zoom;
+        transFront = transfront;
+        transUp = transup;
+        transRight = transright;
         updateCameraVectors();
+        OriginPos = position;
     }
     
     // constructor with scalar values
     Camera(float posX, float posY, float posZ, float upX, float upY, float upZ,
-           float* yaw, float* pitch, float* roll, float* zoom)
+           float* yaw, float* pitch, float* roll, float* zoom, float* transfront, float* transup, float* transright)
     : Front(glm::vec3(0.0f, 0.0f, -1.0f))
     {
         Position = glm::vec3(posX, posY, posZ);
@@ -66,7 +106,11 @@ public:
         Pitch = pitch;
         Roll = roll;
         Zoom = zoom;
+        transFront = transfront;
+        transUp = transup;
+        transRight = transright;
         updateCameraVectors();
+        OriginPos = Position;
     }
 
     // returns the view matrix calculated using Euler Angles and the LookAt Matrix
@@ -79,7 +123,9 @@ public:
     
     void updateCameraTransform(void);
     
-    void Reset(void);
+    void set(float* yaw, float* pitch, float* roll, float* zoom, float* transfront, float* transup, float* transright);
+    
+    void reset(void);
     
 };
 

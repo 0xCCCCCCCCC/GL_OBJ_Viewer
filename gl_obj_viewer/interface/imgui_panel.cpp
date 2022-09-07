@@ -18,7 +18,7 @@ ImGuiPanel::ImGuiPanel(void){
      */
     scale = 0;
     
-    enable_mouse = true;
+    enable_mouse = false;
     display_mode = GL_FILL;
     yaw = 0;
     pitch = 0;
@@ -27,6 +27,10 @@ ImGuiPanel::ImGuiPanel(void){
     front = 0;
     up = 0;
     right = 0;
+    
+    camera = Camera(.0f, .0f, -1.0f, .0f, 1.0f, .0f,
+                    &(this->yaw), &(this->pitch), &(this->roll), &(this->SCALE),
+                    &(this->front), &(this->up), &(this->right));
     
     //file_dialog = FileDialog("obj");
     //file_dialog.setTargetExt(".obj");
@@ -56,11 +60,20 @@ void ImGuiPanel::Panel(void){
     // 场景旋转，旋转的三个参数为欧拉角参数，单击按钮后旋转重置
     if(ImGui::CollapsingHeader("Rotate")){
         ImGui::Text("yaw");ImGui::SameLine(0, 50);
-        ImGui::SliderAngle("##yaw", &yaw);
+        if(ImGui::SliderAngle("##yaw", &yaw)){
+            camera.updateCameraTransform();
+            camera.updateCameraVectors();
+        }
         ImGui::Text("pitch");ImGui::SameLine(0, 44);
-        ImGui::SliderAngle("##pitch", &pitch);
+        if(ImGui::SliderAngle("##pitch", &pitch)){
+            camera.updateCameraTransform();
+            camera.updateCameraVectors();
+        }
         ImGui::Text("roll");ImGui::SameLine(0, 54);
-        ImGui::SliderAngle("##roll", &roll);
+        if(ImGui::SliderAngle("##roll", &roll)){
+            camera.updateCameraTransform();
+            camera.updateCameraVectors();
+        }
         ImGui::Text("reset");ImGui::SameLine(0, 44);
         if(ImGui::Button("rotation reset")){yaw = 0; pitch = 0; roll = 0;}
     }
@@ -84,18 +97,22 @@ void ImGuiPanel::Panel(void){
         if(ImGui::Button("back to origin")){
             yaw = 0; pitch = 0; roll = 0;
             front = 0; up = 0; right = 0;
+            camera.reset();
         }
     }
     // obj文件列表，添加、移除obj文件，对obj文件进行变换操作
 
     // 其他，包括设置是否可以通过鼠标进行变换、重置场景变换等
     if(ImGui::CollapsingHeader("Others")){
+        ImGui::BeginDisabled();
         ImGui::Checkbox("enable mouse control", &enable_mouse);
+        ImGui::EndDisabled();
         ImGui::Text("reset transform");ImGui::SameLine();
         if(ImGui::Button("reset all")){
             yaw = 0; pitch = 0; roll = 0;
             scale = 0; SCALE = 1;
             front = 0; up = 0; right = 0;
+            camera.reset();
         }
         //ImGui::Text("clear objects");ImGui::SameLine();
     }
