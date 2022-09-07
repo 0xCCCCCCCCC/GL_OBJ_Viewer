@@ -32,6 +32,7 @@ using std::string;
 //void Render(void);
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
+void shaderSetMat4(Shader shader, string name, glm::mat4 mat);
 
 //渲染程序
 /*void Render(void){
@@ -83,23 +84,6 @@ int main(int argc, char * argv[]){
     //MARK: 若要使用相对路径，须在Product->Scheme->Edit Scheme->Run->Options->Use custom working directory中设置为项目路径
     Shader shader = shaderCreate("vertex_shader.vert", "fragment_shader.frag");
     
-    //添加绘制对象
-#ifndef TEST_OBJ
-    vector<float> vertices{
-        -0.5f, 0.288f, 0.0f,
-        0.5f, 0.288f, 0.0f,
-        0.0f, -0.577f, 0.0f,
-        -0.5f, -0.288f, 0.0f,
-        0.5f, -0.288f, 0.0f,
-        0.0f, 0.577f, 0.0f
-    };
-
-    vector<unsigned int> indices{
-        0, 3, 5,
-        1, 2, 4
-    };
-#endif
-    
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -107,15 +91,8 @@ int main(int argc, char * argv[]){
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-#ifndef TEST_OBJ
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
-#else
     glBufferData(GL_ARRAY_BUFFER, getLocalVtxSize, getLocalVtxPtr, GL_STATIC_DRAW);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, getLocalIndexSize, getLocalIndexPtr, GL_STATIC_DRAW);
-#endif
-    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-    //glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
@@ -141,7 +118,6 @@ int main(int argc, char * argv[]){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         processInput(window);
         
-#ifdef TEST_OBJ
         // 当场景中新增obj模型时，重新绑定VBO与EBO
         if(getLocalPtCount != local_pt_cnt){
             glBindVertexArray(VAO);
@@ -157,20 +133,12 @@ int main(int argc, char * argv[]){
             local_pt_cnt = getLocalPtCount;
             //std::cout<<local_pt_cnt<<std::endl;
         }
-#endif
         shaderUse(shader);
-
+        shaderSetMat4(shader, "projection", panel.getProjection(WINDOW_WIDTH, WINDOW_HEIGHT));
+        shaderSetMat4(shader, "view", panel.getViewMatrix());
         glBindVertexArray(VAO);
         
-#ifndef TEST_OBJ
-        glDrawElements(GL_TRIANGLES, (unsigned int)indices.size(), GL_UNSIGNED_INT, 0);
-#else
-        //std::cout<<getLocalVtxSize/sizeof(float)<<" "<<getLocalIndexSize/sizeof(int)<<" "<<getLocalPtCnt()<<std::endl;
-        //glDrawElements(GL_TRIANGLES, getLocalPtCount, GL_UNSIGNED_INT, getLocalIndexPtr);
         glDrawElements(GL_TRIANGLES, getLocalPtCount, GL_UNSIGNED_INT, 0);
-#endif
-        //glDrawArrays(GL_TRIANGLES, 0, 6);
-        //glDrawArrays(GL_LINES, 0, 2);
         glBindVertexArray(0);
 
         ImGui::Render();
@@ -202,4 +170,8 @@ void processInput(GLFWwindow *window){
     //按下Esc键时关闭窗口
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+}
+
+void shaderSetMat4(Shader shader, string name, glm::mat4 mat){
+    glUniformMatrix4fv(glGetUniformLocation(*shader, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }

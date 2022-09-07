@@ -12,10 +12,6 @@ using std::string;
 
 // 构造函数，控制面板中一些参数的初始化
 ImGuiPanel::ImGuiPanel(void){
-    /*
-    obj_selected = 0;
-    show_file_dialog = false;
-     */
     scale = 0;
     
     enable_mouse = false;
@@ -27,15 +23,12 @@ ImGuiPanel::ImGuiPanel(void){
     front = 0;
     up = 0;
     right = 0;
+    distance = 1.0f;
     
-    camera = Camera(.0f, .0f, -1.0f, .0f, 1.0f, .0f,
+    camera = Camera(.0f, .0f, 1.0f, .0f, 1.0f, .0f,
                     &(this->yaw), &(this->pitch), &(this->roll), &(this->SCALE),
-                    &(this->front), &(this->up), &(this->right));
-    
-    //file_dialog = FileDialog("obj");
-    //file_dialog.setTargetExt(".obj");
-    /*setTargetExt(".obj");*/
-    
+                    &(this->front), &(this->up), &(this->right), &(this->distance));
+        
     panelSetUp();
 }
 
@@ -58,41 +51,48 @@ void ImGuiPanel::Panel(void){
             display_mode = GL_LINE;
     }
     // 场景旋转，旋转的三个参数为欧拉角参数，单击按钮后旋转重置
-    if(ImGui::CollapsingHeader("Rotate")){
+    if(ImGui::CollapsingHeader("Camera Condition")){
         ImGui::Text("yaw");ImGui::SameLine(0, 50);
         if(ImGui::SliderAngle("##yaw", &yaw)){
-            camera.updateCameraTransform();
             camera.updateCameraVectors();
         }
         ImGui::Text("pitch");ImGui::SameLine(0, 44);
         if(ImGui::SliderAngle("##pitch", &pitch)){
-            camera.updateCameraTransform();
             camera.updateCameraVectors();
         }
-        ImGui::Text("roll");ImGui::SameLine(0, 54);
-        if(ImGui::SliderAngle("##roll", &roll)){
-            camera.updateCameraTransform();
+        //ImGui::Text("roll");ImGui::SameLine(0, 54);
+        //if(ImGui::SliderAngle("##roll", &roll)){
+        //    camera.updateCameraVectors();
+        //}
+        ImGui::Text("distance:");ImGui::SameLine();
+        if(ImGui::SliderFloat("##distance", &distance, 0, 5)){
             camera.updateCameraVectors();
         }
         ImGui::Text("reset");ImGui::SameLine(0, 44);
-        if(ImGui::Button("rotation reset")){yaw = 0; pitch = 0; roll = 0;}
+        if(ImGui::Button("rotation reset")){
+            yaw = 0; pitch = 0; roll = 0;
+            camera.updateCameraVectors();
+        }
     }
     // 场景缩放，缩放的倍率为参数SCALE，参数scale为缩放倍数的指数
-    if(ImGui::CollapsingHeader("Scale")){
+    if(ImGui::CollapsingHeader("Field of View")){
         ImGui::Text("Scale: %.2f", SCALE);ImGui::SameLine(0, SCALE >= 10 ? 3 : 10);
-        if(ImGui::SliderFloat("##scale index", &scale, -4, 4)){SCALE = pow(2.0f, scale);};
+        if(ImGui::SliderFloat("##scale index", &scale, -.75f, .25f)){SCALE = (1 - (scale + .75f)) * M_PI;};
         ImGui::Text("reset");ImGui::SameLine(0, 44);
         if(ImGui::Button("scale reset")){scale = 0; SCALE = 1;}
     }
     
     //ImGui::Text("Wander");
-    if(ImGui::CollapsingHeader("Wander")){
+    if(ImGui::CollapsingHeader("Camera Position")){
         ImGui::Text("right");ImGui::SameLine(0, 40);
-        ImGui::SliderFloat("##right", &this->right, -5, 5);
+        if(ImGui::SliderFloat("##right", &this->right, -1, 1))
+            camera.updateCameraVectors();
         ImGui::Text("up");ImGui::SameLine(0, 50);
-        ImGui::SliderFloat("##up", &this->up, -5, 5);
+        if(ImGui::SliderFloat("##up", &this->up, -1, 1))
+            camera.updateCameraVectors();
         ImGui::Text("front");ImGui::SameLine(0, 38);
-        ImGui::SliderFloat("##front", &this->front, -5, 5);
+        if(ImGui::SliderFloat("##front", &this->front, -1, 1))
+            camera.updateCameraVectors();
         ImGui::Text("reset");ImGui::SameLine(0, 44);
         if(ImGui::Button("back to origin")){
             yaw = 0; pitch = 0; roll = 0;
@@ -124,32 +124,6 @@ void ImGuiPanel::Panel(void){
     
     obj_panel.Panel();
     
-    // 弹出添加obj文件窗口
-    /*
-    if(file_dialog.ifDisplay()){
-        string objfilename;
-        obj_file_path = file_dialog.get(&objfilename);
-        if (obj_file_path != "") {
-            objpath.push_back(obj_file_path);
-            objname.push_back(objfilename);
-        }
-    }
-     */
-    /*
-    if(show_file_dialog){
-        string objfilename;
-        obj_file_path = FileDialogImGui(&objfilename);
-        //printf("%s\n", objpath.c_str());
-        if (obj_file_path != "") {
-            show_file_dialog = false;
-            //printf("%s\n", objfilepath.c_str());
-            objpath.push_back(obj_file_path);
-            objname.push_back(objfilename);
-        }
-    }
-    */
-     
-    //ImGui::End();
 }
 
 // 控制面板外观配置
@@ -194,4 +168,12 @@ bool ImGuiPanel::SetHandler(bool(*op) (int objcmd ,int objid, glm::mat4 transmat
         return false;
     obj_panel.SetHandler(op);
     return true;
+}
+
+glm::mat4 ImGuiPanel::getViewMatrix(void){
+    return this->camera.GetViewMatrix();
+}
+
+glm::mat4 ImGuiPanel::getProjection(float scrwid, float scrht){
+    return this->camera.GetProjection(scrwid, scrht);
 }

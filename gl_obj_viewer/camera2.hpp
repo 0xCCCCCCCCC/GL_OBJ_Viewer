@@ -39,6 +39,8 @@ private:
     float* transUp;
     float* transRight;
     
+    float* Distance;
+    
     glm::vec3 OriginPos;
 
 public:
@@ -53,6 +55,7 @@ public:
         transFront  = NULL;
         transUp     = NULL;
         transRight  = NULL;
+        Distance = NULL;
         OriginPos   = position;
         if(position == glm::vec3(.0f, .0f, .0f))
             Front = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -70,6 +73,7 @@ public:
         transFront  = NULL;
         transUp     = NULL;
         transRight  = NULL;
+        Distance = NULL;
         OriginPos   = Position;
         if(Position == glm::vec3(.0f, .0f, .0f))
             Front = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -78,39 +82,43 @@ public:
     }
     
     // constructor with vectors
-    Camera(float* yaw, float* pitch, float* roll, float* zoom, float* transfront, float* transup, float* transright,
+    Camera(float* yaw, float* pitch, float* roll, float* zoom,
+           float* transfront, float* transup, float* transright, float* distance,
            glm::vec3 position = glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f))
     : Front(glm::vec3(0.0f, 0.0f, -1.0f))
     {
-        Position = position;
-        WorldUp = up;
-        Yaw = yaw;
-        Pitch = pitch;
-        Roll = roll;
-        Zoom = zoom;
-        transFront = transfront;
-        transUp = transup;
-        transRight = transright;
+        Position    = position;
+        WorldUp     = up;
+        Yaw     = yaw;
+        Pitch   = pitch;
+        Roll    = roll;
+        Zoom    = zoom;
+        transFront  = transfront;
+        transUp     = transup;
+        transRight  = transright;
+        Distance    = distance;
         updateCameraVectors();
-        OriginPos = position;
+        OriginPos   = position;
     }
     
     // constructor with scalar values
     Camera(float posX, float posY, float posZ, float upX, float upY, float upZ,
-           float* yaw, float* pitch, float* roll, float* zoom, float* transfront, float* transup, float* transright)
+           float* yaw, float* pitch, float* roll, float* zoom,
+           float* transfront, float* transup, float* transright, float* distance)
     : Front(glm::vec3(0.0f, 0.0f, -1.0f))
     {
-        Position = glm::vec3(posX, posY, posZ);
-        WorldUp = glm::vec3(upX, upY, upZ);
-        Yaw = yaw;
-        Pitch = pitch;
-        Roll = roll;
-        Zoom = zoom;
-        transFront = transfront;
-        transUp = transup;
-        transRight = transright;
+        Position    = glm::vec3(posX, posY, posZ);
+        WorldUp     = glm::vec3(upX, upY, upZ);
+        Yaw     = yaw;
+        Pitch   = pitch;
+        Roll    = roll;
+        Zoom    = zoom;
+        transFront  = transfront;
+        transUp     = transup;
+        transRight  = transright;
+        Distance    = distance;
         updateCameraVectors();
-        OriginPos = Position;
+        OriginPos   = Position;
     }
 
     // returns the view matrix calculated using Euler Angles and the LookAt Matrix
@@ -123,7 +131,8 @@ public:
     
     void updateCameraTransform(void);
     
-    void set(float* yaw, float* pitch, float* roll, float* zoom, float* transfront, float* transup, float* transright);
+    void set(float* yaw, float* pitch, float* roll, float* zoom,
+             float* transfront, float* transup, float* transright, float* distance);
     
     void reset(void);
     

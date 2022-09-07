@@ -46,6 +46,8 @@ public:
     float up;
     float right;
 
+    float distance;
+    
     // obj文件名称、绝对路径、顶点参数数组
     
     ImGuiPanel(void);
@@ -56,6 +58,9 @@ public:
     
     //bool SetHandler(void(*op) (int objcmd ,int objid, glm::mat4 transmat));
     bool SetHandler(bool(*op) (int objcmd, int objid, glm::mat4 transmat));
+    
+    glm::mat4 getViewMatrix(void);
+    glm::mat4 getProjection(float scrwid, float scrht);
 };
 
 #endif /* imgui_panel_hpp */
