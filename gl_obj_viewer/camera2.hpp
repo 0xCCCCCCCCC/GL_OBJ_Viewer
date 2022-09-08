@@ -16,7 +16,6 @@
 
 #include <vector>
 
-// An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
 class Camera
 {
 private:
@@ -31,8 +30,6 @@ private:
     float* Pitch;
     float* Roll;
     // camera options
-    //float MovementSpeed;
-    //float MouseSensitivity;
     float* Zoom;
     
     float* transFront;
@@ -121,12 +118,10 @@ public:
         OriginPos   = Position;
     }
 
-    // returns the view matrix calculated using Euler Angles and the LookAt Matrix
     glm::mat4 GetViewMatrix(void);
     
     glm::mat4 GetProjection(float SCR_WIDTH, float SCR_HEIGHT);
 
-    // calculates the front vector from the Camera's (updated) Euler Angles
     void updateCameraVectors(void);
     
     void updateCameraTransform(void);

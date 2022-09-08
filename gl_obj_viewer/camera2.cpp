@@ -7,34 +7,33 @@
 
 #include "camera2.hpp"
 
+// 观察矩阵
 glm::mat4 Camera::GetViewMatrix(void){
-    glm::vec3 CurPos = Position;// + glm::mat3(Right, Up, Front) * glm::vec3(*(this->transRight), *(this->transUp), *(this->transFront));
+    glm::vec3 CurPos = Position;
     return glm::lookAt(CurPos, CurPos + Front, Up);
 }
 
+// 投影矩阵
 glm::mat4 Camera::GetProjection(float SCR_WIDTH, float SCR_HEIGHT){
     //return glm::perspective(glm::radians(*Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
     return glm::perspective(*Zoom, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 }
 
+// 更新相机向量
 void Camera::updateCameraVectors(void){
-    // calculate the new Front vector
     glm::vec3 front;
-    front.x = cos(*Yaw - .5f * M_PI) * cos(*Pitch);
-    front.y = sin(*Pitch);
-    front.z = sin(*Yaw - .5f * M_PI) * cos(*Pitch);
+    front.x = cos(*Yaw - .5f * M_PI) * cos(-*Pitch);
+    front.y = sin(-*Pitch);
+    front.z = sin(*Yaw - .5f * M_PI) * cos(-*Pitch);
     Front   = glm::normalize(front);
     
-    //TODO: update worldup vector
-    
-    // also re-calculate the Right and Up vector
-    Right   = glm::normalize(glm::cross(Front, WorldUp));  // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
     if(abs(*Pitch) < .5f * M_PI || abs(*Pitch) > 1.5f * M_PI)
-        Up  = glm::normalize(glm::cross(Right, Front));
+        Right = glm::normalize(glm::cross(Front, WorldUp));
     else
-        Up  = glm::normalize(glm::cross(Front, Right));
+        Right = glm::normalize(glm::cross(WorldUp, Front));
+    Up  = glm::normalize(glm::cross(Right, Front));
     
-    Position = -*Distance * (Front + glm::mat3(Right, Up, Front) * glm::vec3(*(this->transRight), *(this->transUp), *(this->transFront)));
+    Position = -*Distance * (Front + glm::mat3(Right, Up, Front) * glm::vec3(*(this->transRight), *(this->transUp), -*(this->transFront)));
 }
 
 void Camera::updateCameraTransform(void){
@@ -57,6 +56,7 @@ void Camera::set(float* yaw, float* pitch, float* roll, float* zoom,
     updateCameraVectors();
 }
 
+// 重置相机参数
 void Camera::reset(void){
     this->Position  = this->OriginPos;
     this->WorldUp   = glm::vec3(.0f, 1.0f, .0f);

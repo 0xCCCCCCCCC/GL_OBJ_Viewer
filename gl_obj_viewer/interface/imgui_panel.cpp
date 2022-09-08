@@ -38,8 +38,6 @@ void ImGuiPanel::Panel(void){
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
     
-    //ImGui::ShowDemoWindow();
-    
     ImGui::Begin("options");
     ImGui::Text("Camera arguments");
     // 显示模式，选择以多边形或是线框的形式进行展示

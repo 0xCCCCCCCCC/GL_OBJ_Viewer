@@ -15,7 +15,7 @@
 
 #include "glm.hpp"
 
-#include "shader.h"
+#include "shader.hpp"
 #include "imgui_panel.hpp"
 #include "obj_data.hpp"
 
@@ -24,15 +24,12 @@
 #define WINDOW_WIDTH 1920
 #define WINDOW_HEIGHT 1080
 
-#define TEST_OBJ
-
 using std::vector;
 using std::string;
 
 //void Render(void);
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
-void shaderSetMat4(Shader shader, string name, glm::mat4 mat);
 
 //渲染程序
 /*void Render(void){
@@ -114,7 +111,6 @@ int main(int argc, char * argv[]){
         glPolygonMode(GL_FRONT_AND_BACK, panel.display_mode);
         //Render();
         glClearColor(0.17f, 0.17f, 0.17f, 1.0f);
-        //glClear(GL_COLOR_BUFFER_BIT);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         processInput(window);
         
@@ -125,17 +121,18 @@ int main(int argc, char * argv[]){
             glBufferData(GL_ARRAY_BUFFER, getLocalVtxSize, getLocalVtxPtr, GL_STATIC_DRAW);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, getLocalIndexSize, getLocalIndexPtr, GL_STATIC_DRAW);
-            //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-            //glEnableVertexAttribArray(0);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             glBindVertexArray(0);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
             local_pt_cnt = getLocalPtCount;
-            //std::cout<<local_pt_cnt<<std::endl;
         }
         shaderUse(shader);
         shaderSetMat4(shader, "projection", panel.getProjection(WINDOW_WIDTH, WINDOW_HEIGHT));
         shaderSetMat4(shader, "view", panel.getViewMatrix());
+        shaderSetVec3(shader, "lightPos", glm::vec3(0, 3, 0));
+        shaderSetVec3(shader, "lightColor", glm::vec3(1, 1, 1));
+        shaderSetFloat(shader, "ambientStrength", .1f);
+        shaderSetFloat(shader, "shininess", 64);
         glBindVertexArray(VAO);
         
         glDrawElements(GL_TRIANGLES, getLocalPtCount, GL_UNSIGNED_INT, 0);
@@ -150,7 +147,6 @@ int main(int argc, char * argv[]){
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
-    shaderDelete(shader);
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
@@ -170,8 +166,4 @@ void processInput(GLFWwindow *window){
     //按下Esc键时关闭窗口
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-}
-
-void shaderSetMat4(Shader shader, string name, glm::mat4 mat){
-    glUniformMatrix4fv(glGetUniformLocation(*shader, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }

@@ -10,7 +10,7 @@
 		691EC68128A4FE4700AFE890 /* libGLEW.2.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 691EC68028A4FE4700AFE890 /* libGLEW.2.2.0.dylib */; };
 		691EC68328A4FE6500AFE890 /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 691EC68228A4FE6500AFE890 /* libglfw.3.3.dylib */; };
 		691EC68528A4FF9100AFE890 /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 691EC68428A4FF9100AFE890 /* glad.c */; };
-		691EC68828A5E68D00AFE890 /* shader.c in Sources */ = {isa = PBXBuildFile; fileRef = 691EC68728A5E68D00AFE890 /* shader.c */; };
+		691EC68828A5E68D00AFE890 /* shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 691EC68728A5E68D00AFE890 /* shader.cpp */; };
 		691EC6C728A9E12100AFE890 /* file_dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 691EC6C528A9E12100AFE890 /* file_dialog.cpp */; };
 		692AC05228B8B6FD000348D2 /* obj_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 692AC05028B8B6FD000348D2 /* obj_loader.cpp */; };
 		6942FAC128AA40AF00373F67 /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6942FAB228AA40AF00373F67 /* imgui.cpp */; };
@@ -45,8 +45,8 @@
 		691EC68228A4FE6500AFE890 /* libglfw.3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.3.dylib; path = ../../../../../usr/local/Cellar/glfw/3.3.7/lib/libglfw.3.3.dylib; sourceTree = "<group>"; };
 		691EC68428A4FF9100AFE890 /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
 		691EC68628A5E68D00AFE890 /* fragment_shader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = fragment_shader.frag; sourceTree = "<group>"; };
-		691EC68728A5E68D00AFE890 /* shader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = shader.c; sourceTree = "<group>"; };
-		691EC68928A5E69C00AFE890 /* shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = shader.h; sourceTree = "<group>"; };
+		691EC68728A5E68D00AFE890 /* shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = shader.cpp; sourceTree = "<group>"; };
+		691EC68928A5E69C00AFE890 /* shader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = shader.hpp; sourceTree = "<group>"; };
 		691EC68A28A5E69C00AFE890 /* vertex_shader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = vertex_shader.vert; sourceTree = "<group>"; };
 		691EC6C528A9E12100AFE890 /* file_dialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = file_dialog.cpp; sourceTree = "<group>"; };
 		691EC6C628A9E12100AFE890 /* file_dialog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = file_dialog.hpp; sourceTree = "<group>"; };
@@ -147,8 +147,8 @@
 				6999602A28BF3FC5006815A8 /* obj_data.hpp */,
 				692AC05028B8B6FD000348D2 /* obj_loader.cpp */,
 				692AC05128B8B6FD000348D2 /* obj_loader.hpp */,
-				691EC68928A5E69C00AFE890 /* shader.h */,
-				691EC68728A5E68D00AFE890 /* shader.c */,
+				691EC68728A5E68D00AFE890 /* shader.cpp */,
+				691EC68928A5E69C00AFE890 /* shader.hpp */,
 				691EC68428A4FF9100AFE890 /* glad.c */,
 				6999602828BF3C9B006815A8 /* interface */,
 				6942FAC728AA40EE00373F67 /* imgui */,
@@ -238,7 +238,7 @@
 			files = (
 				6977043D28A4F9B400182425 /* main.cpp in Sources */,
 				6942FACA28AA443D00373F67 /* imgui_panel.cpp in Sources */,
-				691EC68828A5E68D00AFE890 /* shader.c in Sources */,
+				691EC68828A5E68D00AFE890 /* shader.cpp in Sources */,
 				6999602B28BF3FC5006815A8 /* obj_data.cpp in Sources */,
 				69514BA128ACBA9C00444FE8 /* imgui_demo.cpp in Sources */,
 				6942FAC528AA40AF00373F67 /* imgui_impl_glfw.cpp in Sources */,

@@ -5,7 +5,7 @@
 //  Created by YNK on 2022/7/25.
 //
 
-#include "shader.h"
+#include "shader.hpp"
 
 char *readShaderFile(const char *fn)
 {
@@ -150,8 +150,14 @@ void shaderUse(Shader shader){
     glUseProgram(*shader);
 }
 
-void shaderDelete(Shader shader){
-    free(shader);
+void shaderSetMat4(Shader shader, std::string name, glm::mat4 mat){
+    glUniformMatrix4fv(glGetUniformLocation(*shader, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 
-//参考http://t.csdn.cn/7RLUU
+void shaderSetVec3(Shader shader, std::string name, glm::vec3 vec){
+    glUniform3fv(glGetUniformLocation(*shader, name.c_str()), 1, &vec[0]);
+}
+
+void shaderSetFloat(Shader shader, std::string name, float val){
+    glUniform1f(glGetUniformLocation(*shader, name.c_str()), val);
+}

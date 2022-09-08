@@ -5,6 +5,10 @@ in vec2 screenCoord;
 in vec3 vtxnorm;
 
 //uniform vec2 screenSize;
+uniform float ambientStrength;
+uniform vec3 lightColor;
+uniform vec3 lightPos;
+uniform float shininess;
 
 out vec4 FragColor;
 

@@ -8,21 +8,15 @@
 #ifndef shader_h
 #define shader_h
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include <stdio.h>
+#include <iostream>
 #include <stdlib.h>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#ifdef Shader
-#undef Shader
-#endif
+#include "glm.hpp"
 
-#define Shader GLuint*
+typedef GLuint* Shader;
 
 char *readShaderFile(const char *fn);
 
@@ -39,10 +33,10 @@ Shader shaderCreate(const char *vertexShaderFile, const char *fragmentShaderFile
 
 void shaderUse(Shader shader);
 
-void shaderDelete(Shader shader);
+void shaderSetMat4(Shader shader, std::string name, glm::mat4 mat);
 
-#ifdef __cplusplus
-}
-#endif
+void shaderSetVec3(Shader shader, std::string name, glm::vec3 vec);
+
+void shaderSetFloat(Shader shader, std::string name, float val);
 
 #endif /* shader_h */
