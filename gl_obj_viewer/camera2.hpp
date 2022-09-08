@@ -121,6 +121,8 @@ public:
     glm::mat4 GetViewMatrix(void);
     
     glm::mat4 GetProjection(float SCR_WIDTH, float SCR_HEIGHT);
+    
+    glm::vec3 GetCameraPos(void);
 
     void updateCameraVectors(void);
     

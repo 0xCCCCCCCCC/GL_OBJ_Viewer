@@ -19,6 +19,10 @@ glm::mat4 Camera::GetProjection(float SCR_WIDTH, float SCR_HEIGHT){
     return glm::perspective(*Zoom, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 }
 
+glm::vec3 Camera::GetCameraPos(void){
+    return this->Position;
+}
+
 // 更新相机向量
 void Camera::updateCameraVectors(void){
     glm::vec3 front;

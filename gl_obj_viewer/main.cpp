@@ -129,10 +129,11 @@ int main(int argc, char * argv[]){
         shaderUse(shader);
         shaderSetMat4(shader, "projection", panel.getProjection(WINDOW_WIDTH, WINDOW_HEIGHT));
         shaderSetMat4(shader, "view", panel.getViewMatrix());
-        shaderSetVec3(shader, "lightPos", glm::vec3(0, 3, 0));
-        shaderSetVec3(shader, "lightColor", glm::vec3(1, 1, 1));
-        shaderSetFloat(shader, "ambientStrength", .1f);
-        shaderSetFloat(shader, "shininess", 64);
+        shaderSetVec3(shader, "lightPos", glm::vec3(1, 1, 1));
+        shaderSetVec3(shader, "lightColor", glm::vec3(.0, .08, .08));
+        shaderSetVec3(shader, "viewPos", panel.getCameraPos());
+        shaderSetFloat(shader, "ambientStrength", .5f);
+        shaderSetFloat(shader, "shininess", 256);
         glBindVertexArray(VAO);
         
         glDrawElements(GL_TRIANGLES, getLocalPtCount, GL_UNSIGNED_INT, 0);

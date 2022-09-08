@@ -175,3 +175,7 @@ glm::mat4 ImGuiPanel::getViewMatrix(void){
 glm::mat4 ImGuiPanel::getProjection(float scrwid, float scrht){
     return this->camera.GetProjection(scrwid, scrht);
 }
+
+glm::vec3 ImGuiPanel::getCameraPos(void){
+    return this->camera.GetCameraPos();
+}

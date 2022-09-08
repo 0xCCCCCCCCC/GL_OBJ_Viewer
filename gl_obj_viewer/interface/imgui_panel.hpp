@@ -61,6 +61,7 @@ public:
     
     glm::mat4 getViewMatrix(void);
     glm::mat4 getProjection(float scrwid, float scrht);
+    glm::vec3 getCameraPos(void);
 };
 
 #endif /* imgui_panel_hpp */
