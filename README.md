@@ -49,7 +49,7 @@ Phong光照模型在片元着色器中实现。下面通过片元着色器GLSL�
 #### 1) 环境泛光
 
 在本项目中环境泛光由环境光颜色与泛光强度决定，在片元着色器中环境泛光的实现如下（本项目中环境光颜色的RGB值为 *\#080808*）：
-```
+```glsl
 uniform float ambientStrength;
 ...
 vec3 ambient = vec3(.5f, .5f, .5f) * ambientStrength;
@@ -68,7 +68,7 @@ vec3 diffuse = max(dot((vtxpos - lightPos), vtxnorm), .0f) * vec3(1.0f, 1.0f, 1.
 
 镜面高光由反射光方向、观察者位置有关，当观察者正对反射光时高光最强，并且高光随着观察者偏离反射光而减弱；同时镜面高光也与材质的高光系数有关，高光系数代表高光在材质上的衰减程度，高光系数月大高光面积越小。镜面高光在片元着色器中的实现如下;
 
-```
+```glsl
 uniform vec3 lightPos;
 uniform vec3 viewPos;
 uniform float shininess;
@@ -81,7 +81,7 @@ if(delta > 0){
 
 将环境泛光、漫反射与镜面高光组合得到完整的Phong光照模型，在片元着色器中实现如下:
 
-```
+```glsl
 #version 330 core
 
 in vec3 vtxpos;
@@ -117,7 +117,7 @@ void main(){
 
 当相机各参数变化时，调用更新相机状态函数，以保证相机状态改变与相机参数变化同步。该函数根据当前相机的欧拉角参数求得当前相机坐标系的标准正交基，并将相机位置根据位置参数移动至相应位置，以求得正确的观察矩阵。该函数的实现如下：
 
-```
+```cpp
 void Camera::updateCameraVectors(void){
     glm::vec3 front;
     front.x = cos(*Yaw - .5f * M_PI) * cos(-*Pitch);
@@ -137,7 +137,7 @@ void Camera::updateCameraVectors(void){
 
 相机类的各向量参数通过glm库定义，并且根据相机的各参数，通过glm库的`lookAt`函数构造观察矩阵，并传入顶点着色器中，实现相机视角变换。观察矩阵实现如下：
 
-```
+```cpp
 glm::mat4 Camera::GetViewMatrix(void){
     return glm::lookAt(Position, Position + Front, Up);
 }
@@ -181,7 +181,7 @@ f 321/321/298 324/324/301 323/323/300
 
 本项目中对读取每一个面ABC，将其的 **AC** 与 **AB** 向量进行叉乘，以得到面ABC的法向量；将每一个点参与构成的所有面的法向量求和并归一化，以求得obj模型每一个点的顶点法向量数据，并存储于数组 `data_vn` 中。由于obj文件中构成一个面的3个顶点的位置是按照一定规律排布的，故计算面的顶点法向量时，将该面顶点下标数据的第一、三个数据对应的顶点坐标相减得到 **AC** ，将第一、二个数据对应的顶点坐标数据相减得到 **AB** ，进行叉乘后累加至该面3个顶点在顶点法向量数组 `data_vn` 中对应的值；当所有顶点法向量均计算完毕后，对所得的每一个顶点法向量进行归一化计算，得到最终的顶点法向量数据。顶点法向量的计算如下：
 
-```
+```cpp
 bool Loader::calc_vn(void){
     data_vn = vector<float>(data_v.size(), .0f);
 
