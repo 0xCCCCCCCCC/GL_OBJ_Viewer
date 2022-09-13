@@ -9,8 +9,7 @@
 
 // 观察矩阵
 glm::mat4 Camera::GetViewMatrix(void){
-    glm::vec3 CurPos = Position;
-    return glm::lookAt(CurPos, CurPos + Front, Up);
+    return glm::lookAt(Position, Position + Front, Up);
 }
 
 // 投影矩阵
