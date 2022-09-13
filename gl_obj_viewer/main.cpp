@@ -27,15 +27,8 @@
 using std::vector;
 using std::string;
 
-//void Render(void);
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
-
-//渲染程序
-/*void Render(void){
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-}*/
 
 int main(int argc, char * argv[]){
     //OpenGL初始化，声明版本号为3.3，使用核心配置文件
