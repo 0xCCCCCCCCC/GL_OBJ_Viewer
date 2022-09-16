@@ -36,13 +36,17 @@ extern Loader _data_loader;
 // 用于预览模型变换的临时变换矩阵temp_trans
 extern bool _data_use_temp_trans;
 extern glm::mat4 _data_temp_trans;
+extern bool _data_is_transforming;
 
 extern unsigned int _local_pt_cnt;
 
 void _data_removeData(int objid);
 bool _data_manageData(int objcmd ,int objid, glm::mat4 transmat);
-void _data_updateLocal(void);
+void _data_updateLocal(int transid = -1);
+void _data_useTransform(int objid);
 void _data_clearAll(void);
+
+void _data_TransComplete(void);
 
 #define getObjPath (&(_data_objpath))
 #define getObjName (&(_data_objname))
@@ -62,6 +66,8 @@ void _data_clearAll(void);
 //#define getLocalVNSize ((_data_local_vn.size()) * sizeof(float))
 //#define getLocalVNPtr (&(_data_local_vn[0]))
 #define getLocalPtCount ((unsigned int)(_local_pt_cnt))
+#define getIfTransform (_data_is_transforming)
+#define localTransformComplete _data_TransComplete
 
 #define getCoordPtr (_data_coord)
 #define getCoordSize ((636) * (sizeof(float)))

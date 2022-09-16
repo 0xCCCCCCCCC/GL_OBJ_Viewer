@@ -119,7 +119,7 @@ int main(int argc, char * argv[]){
         processInput(window);
         
         // 当场景中新增obj模型时，重新绑定VBO与EBO
-        if(getLocalPtCount != local_pt_cnt){
+        if(getIfTransform || getLocalPtCount != local_pt_cnt){
             glBindVertexArray(VAO);
             glBindBuffer(GL_ARRAY_BUFFER, VBO);
             glBufferData(GL_ARRAY_BUFFER, getLocalVtxSize, getLocalVtxPtr, GL_STATIC_DRAW);
@@ -129,6 +129,7 @@ int main(int argc, char * argv[]){
             glBindVertexArray(0);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
             local_pt_cnt = getLocalPtCount;
+            localTransformComplete();
         }
         // 将观察矩阵等参数传入着色器程序
         shaderUse(shader);

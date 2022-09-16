@@ -249,12 +249,13 @@ void ObjPanel::_calc_trans_mat(void){
     // obj_trans = glm::mat4(1);
     glm::mat4 _trans_mat(1.0f);
     _trans_mat = glm::translate(_trans_mat, glm::vec3(this->obj_x, this->obj_y, this->obj_z));
-    _trans_mat = glm::rotate(_trans_mat, glm::radians(this->obj_yaw), glm::vec3(0, 0, 1));
-    _trans_mat = glm::rotate(_trans_mat, glm::radians(this->obj_pitch), glm::vec3(0, 1, 0));
-    _trans_mat = glm::rotate(_trans_mat, glm::radians(this->obj_roll), glm::vec3(1, 0, 0));
+    _trans_mat = glm::rotate(_trans_mat, this->obj_yaw, glm::vec3(0, 0, 1));
+    _trans_mat = glm::rotate(_trans_mat, this->obj_pitch, glm::vec3(0, 1, 0));
+    _trans_mat = glm::rotate(_trans_mat, this->obj_roll, glm::vec3(1, 0, 0));
     float _obj_scale = pow(10, this->obj_scale);
     _trans_mat = glm::scale(_trans_mat, glm::vec3(_obj_scale, _obj_scale, _obj_scale));
     
     this->obj_trans = _trans_mat;
     // std::cout<<glm::to_string(this->obj_trans)<<std::endl;
+    op(OBJ_TRANSFORM, obj_selected, obj_trans);
 }

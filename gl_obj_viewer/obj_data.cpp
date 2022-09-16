@@ -26,6 +26,7 @@ Loader _data_loader;
 
 bool _data_use_temp_trans = false;
 glm::mat4 _data_temp_trans;
+bool _data_is_transforming = false;
 
 unsigned int _local_pt_cnt = 0;
 
@@ -90,6 +91,7 @@ float _data_coord[] = {
     1.0f,  .0f,   1.0f,  .0f,   .0f,   1.0f,  .0f,   1.0f,  1.0f
 };
 
+// 从场景中删除指定模型
 void _data_removeData(int objid){
     _data_objdata_v[objid]->clear();
     _data_objdata_f[objid]->clear();
@@ -150,27 +152,31 @@ bool _data_manageData(int objcmd, int objid, glm::mat4 transmat){
         case OBJ_TRANSFORM:
             _data_use_temp_trans = true;
             _data_temp_trans = transmat;
+            _data_is_transforming = true;
             //TODO: 位移、缩放操作预览
+            printf("transforming %i\n", objid);
             break;
         case OBJ_CANCEL_TRANSFORM:
             _data_use_temp_trans = false;
             _data_temp_trans = glm::mat4(0);
+            _data_is_transforming = true;
             break;
         case OBJ_CONFIRM_TRANSFORM:
             //TODO: apply transform to objdata
             _data_use_temp_trans = false;
             _data_temp_trans = glm::mat4(0);
+            _data_useTransform(objid);
             break;
             
         default:
             printf("?\n");
             break;
     }
-    _data_updateLocal();
+    _data_updateLocal(objid);
     return true;
 }
 
-void _data_updateLocal(void){
+void _data_updateLocal(int transid){
     _local_pt_cnt = 0;
     /*
     _data_local_v.clear();
@@ -179,16 +185,48 @@ void _data_updateLocal(void){
             _data_local_v.push_back((*(_data_objdata_v[objid]))[vid]);
     _data_local_f.clear();
      */
-    
     _data_local_v.clear();
-    for(int objid = 0; objid<_data_objdata_v.size(); objid++){
-        for(int vid = 0; vid<_data_objdata_v[objid]->size() / 3; vid++ ){
-            _data_local_v.push_back((*(_data_objdata_v[objid]))[3 * vid]);
-            _data_local_v.push_back((*(_data_objdata_v[objid]))[3 * vid + 1]);
-            _data_local_v.push_back((*(_data_objdata_v[objid]))[3 * vid + 2]);
-            _data_local_v.push_back((*(_data_objdata_vn[objid]))[3 * vid]);
-            _data_local_v.push_back((*(_data_objdata_vn[objid]))[3 * vid + 1]);
-            _data_local_v.push_back((*(_data_objdata_vn[objid]))[3 * vid + 2]);
+    if(_data_use_temp_trans){
+        for(int objid = 0; objid<_data_objdata_v.size(); objid++){
+            if(objid == transid){
+                for(int vid = 0; vid<_data_objdata_v[objid]->size() / 3; vid++ ){
+                    glm::vec4 former_v((*(_data_objdata_v[objid]))[3 * vid],
+                                       (*(_data_objdata_v[objid]))[3 * vid + 1],
+                                       (*(_data_objdata_v[objid]))[3 * vid + 2], 1.0f);
+                    glm::vec4 trans_v = former_v * _data_temp_trans;
+                    glm::vec4 former_vn((*(_data_objdata_vn[objid]))[3 * vid],
+                                       (*(_data_objdata_vn[objid]))[3 * vid + 1],
+                                       (*(_data_objdata_vn[objid]))[3 * vid + 2], 1.0f);
+                    glm::vec3 trans_vn = glm::normalize(glm::vec3(former_vn * _data_temp_trans));
+                    _data_local_v.push_back(trans_v[0]);
+                    _data_local_v.push_back(trans_v[1]);
+                    _data_local_v.push_back(trans_v[2]);
+                    _data_local_v.push_back(trans_vn[0]);
+                    _data_local_v.push_back(trans_vn[1]);
+                    _data_local_v.push_back(trans_vn[2]);
+                }
+            }else{
+                for(int vid = 0; vid<_data_objdata_v[objid]->size() / 3; vid++ ){
+                    _data_local_v.push_back((*(_data_objdata_v[objid]))[3 * vid]);
+                    _data_local_v.push_back((*(_data_objdata_v[objid]))[3 * vid + 1]);
+                    _data_local_v.push_back((*(_data_objdata_v[objid]))[3 * vid + 2]);
+                    _data_local_v.push_back((*(_data_objdata_vn[objid]))[3 * vid]);
+                    _data_local_v.push_back((*(_data_objdata_vn[objid]))[3 * vid + 1]);
+                    _data_local_v.push_back((*(_data_objdata_vn[objid]))[3 * vid + 2]);
+                }
+            }
+        }
+    }
+    else{
+        for(int objid = 0; objid<_data_objdata_v.size(); objid++){
+            for(int vid = 0; vid<_data_objdata_v[objid]->size() / 3; vid++ ){
+                _data_local_v.push_back((*(_data_objdata_v[objid]))[3 * vid]);
+                _data_local_v.push_back((*(_data_objdata_v[objid]))[3 * vid + 1]);
+                _data_local_v.push_back((*(_data_objdata_v[objid]))[3 * vid + 2]);
+                _data_local_v.push_back((*(_data_objdata_vn[objid]))[3 * vid]);
+                _data_local_v.push_back((*(_data_objdata_vn[objid]))[3 * vid + 1]);
+                _data_local_v.push_back((*(_data_objdata_vn[objid]))[3 * vid + 2]);
+            }
         }
     }
     _data_local_f.clear();
@@ -207,6 +245,14 @@ void _data_updateLocal(void){
             _data_local_vn.push_back((*(_data_objdata_vn[objid]))[vnid]);
      */
     _local_pt_cnt = (unsigned int)_data_local_f.size();
+}
+
+void _data_useTransform(int objid){
+    _data_is_transforming = true;
+}
+
+void _data_TransComplete(void){
+    _data_is_transforming = false;
 }
 
 void _data_clearAll(void){
