@@ -78,6 +78,8 @@
 		6999602A28BF3FC5006815A8 /* obj_data.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = obj_data.hpp; sourceTree = "<group>"; };
 		6999602D28C5F3E1006815A8 /* camera2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = camera2.cpp; sourceTree = "<group>"; };
 		6999602E28C5F3E1006815A8 /* camera2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = camera2.hpp; sourceTree = "<group>"; };
+		69A3218E28D41BA900782533 /* coord_shader_v.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = coord_shader_v.vert; sourceTree = "<group>"; };
+		69A3218F28D41BC700782533 /* coord_shader_f.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = coord_shader_f.frag; sourceTree = "<group>"; };
 		69E680F528A4FD4D00B9661C /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -139,8 +141,6 @@
 			isa = PBXGroup;
 			children = (
 				6977043C28A4F9B400182425 /* main.cpp */,
-				691EC68A28A5E69C00AFE890 /* vertex_shader.vert */,
-				691EC68628A5E68D00AFE890 /* fragment_shader.frag */,
 				6999602D28C5F3E1006815A8 /* camera2.cpp */,
 				6999602E28C5F3E1006815A8 /* camera2.hpp */,
 				6999602928BF3FC5006815A8 /* obj_data.cpp */,
@@ -151,6 +151,7 @@
 				691EC68928A5E69C00AFE890 /* shader.hpp */,
 				691EC68428A4FF9100AFE890 /* glad.c */,
 				6999602828BF3C9B006815A8 /* interface */,
+				69A3219028D41E9800782533 /* shader */,
 				6942FAC728AA40EE00373F67 /* imgui */,
 			);
 			path = gl_obj_viewer;
@@ -167,6 +168,17 @@
 				691EC6C628A9E12100AFE890 /* file_dialog.hpp */,
 			);
 			path = interface;
+			sourceTree = "<group>";
+		};
+		69A3219028D41E9800782533 /* shader */ = {
+			isa = PBXGroup;
+			children = (
+				691EC68A28A5E69C00AFE890 /* vertex_shader.vert */,
+				691EC68628A5E68D00AFE890 /* fragment_shader.frag */,
+				69A3218E28D41BA900782533 /* coord_shader_v.vert */,
+				69A3218F28D41BC700782533 /* coord_shader_f.frag */,
+			);
+			path = shader;
 			sourceTree = "<group>";
 		};
 		69E680F428A4FD4D00B9661C /* Frameworks */ = {

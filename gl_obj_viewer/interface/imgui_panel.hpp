@@ -35,6 +35,7 @@ private:
 public:
     bool enable_mouse;
     GLuint display_mode;
+    bool show_coord;
     // 欧拉角参数
     float yaw;
     float pitch;

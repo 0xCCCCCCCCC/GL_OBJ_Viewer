@@ -72,7 +72,8 @@ int main(int argc, char * argv[]){
 
     //加载编译着色器
     //MARK: 若要使用相对路径，须在Product->Scheme->Edit Scheme->Run->Options->Use custom working directory中设置为项目路径
-    Shader shader = shaderCreate("vertex_shader.vert", "fragment_shader.frag");
+    Shader shader = shaderCreate("shader/vertex_shader.vert", "shader/fragment_shader.frag");
+    Shader coord_shader = shaderCreate("shader/coord_shader_v.vert", "shader/coord_shader_f.frag");
     
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
@@ -81,8 +82,8 @@ int main(int argc, char * argv[]){
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ARRAY_BUFFER, getLocalVtxSize, getLocalVtxPtr, GL_STATIC_DRAW);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, getLocalIndexSize, getLocalIndexPtr, GL_STATIC_DRAW);
+    //glBufferData(GL_ARRAY_BUFFER, getLocalVtxSize, getLocalVtxPtr, GL_STATIC_DRAW);
+    //glBufferData(GL_ELEMENT_ARRAY_BUFFER, getLocalIndexSize, getLocalIndexPtr, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
@@ -90,6 +91,17 @@ int main(int argc, char * argv[]){
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    
+    unsigned int C_VBO, C_VAO;
+    glGenVertexArrays(1, &C_VAO);
+    glGenBuffers(1, &C_VBO);
+    glBindVertexArray(C_VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, C_VBO);
+    glBufferData(GL_ARRAY_BUFFER, getCoordSize, getCoordPtr, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 
     // 场景中当前Vertex的数量，用于判断是否新增obj模型
     unsigned int local_pt_cnt = 0;
@@ -102,7 +114,6 @@ int main(int argc, char * argv[]){
     while (!glfwWindowShouldClose(window)) {
         panel.Panel();
         glPolygonMode(GL_FRONT_AND_BACK, panel.display_mode);
-        //Render();
         glClearColor(0.17f, 0.17f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         processInput(window);
@@ -119,19 +130,29 @@ int main(int argc, char * argv[]){
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
             local_pt_cnt = getLocalPtCount;
         }
+        // 将观察矩阵等参数传入着色器程序
         shaderUse(shader);
         shaderSetMat4(shader, "projection", panel.getProjection(WINDOW_WIDTH, WINDOW_HEIGHT));
         shaderSetMat4(shader, "view", panel.getViewMatrix());
         shaderSetVec3(shader, "lightPos", glm::vec3(1, 1, 1));
-        shaderSetVec3(shader, "lightColor", glm::vec3(.0, .08, .08));
+        shaderSetVec3(shader, "lightColor", glm::vec3(.6, .8, .8));
         shaderSetVec3(shader, "viewPos", panel.getCameraPos());
-        shaderSetFloat(shader, "ambientStrength", .5f);
-        shaderSetFloat(shader, "shininess", 256);
+        shaderSetFloat(shader, "ambientStrength", .3f);
+        shaderSetFloat(shader, "shininess", 2);
         glBindVertexArray(VAO);
         
         glDrawElements(GL_TRIANGLES, getLocalPtCount, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
 
+        if(panel.show_coord){
+            shaderUse(coord_shader);
+            shaderSetMat4(coord_shader, "projection", panel.getProjection(WINDOW_WIDTH, WINDOW_HEIGHT));
+            shaderSetMat4(coord_shader, "view", panel.getViewMatrix());
+            glBindVertexArray(C_VAO);
+            glDrawArrays(GL_LINES, 0, getCoordCnt);
+            glBindVertexArray(0);
+        }
+        
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         

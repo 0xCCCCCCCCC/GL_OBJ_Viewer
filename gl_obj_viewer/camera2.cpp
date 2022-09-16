@@ -39,13 +39,6 @@ void Camera::updateCameraVectors(void){
     Position = -*Distance * (Front + glm::mat3(Right, Up, Front) * glm::vec3(*(this->transRight), *(this->transUp), -*(this->transFront)));
 }
 
-void Camera::updateCameraTransform(void){
-    //this->Position      += glm::mat3(Right, Up, Front) * glm::vec3(*(this->transRight), *(this->transUp), *(this->transFront));
-    //*(this->transRight) = 0;
-    //*(this->transUp)    = 0;
-    //*(this->transFront) = 0;
-}
-
 void Camera::set(float* yaw, float* pitch, float* roll, float* zoom,
                  float* transfront, float* transup, float* transright, float* distance){
     Yaw     = yaw;
@@ -69,6 +62,5 @@ void Camera::reset(void){
     else
         this->Front = this->Position;
     *(this->Distance) = glm::length(this->OriginPos);
-    updateCameraTransform();
     updateCameraVectors();
 }

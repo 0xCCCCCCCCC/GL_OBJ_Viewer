@@ -15,18 +15,14 @@ uniform float shininess;
 out vec4 FragColor;
 
 void main(){
-    //FragColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
-    //FragColor = vec4(screenCoord.x, screenCoord.y, 0.2, 1.0);
     vec3 ambient = vec3(.5f, .5f, .5f) * ambientStrength;
-    vec3 diffuse = max(dot((vtxpos - lightPos), vtxnorm), .0f) * vec3(1.0f, 1.0f, 1.0f);
+    vec3 diffuse = max(dot((vtxpos - lightPos), normalize(vtxnorm)), .0f) * vec3(1.0f, 1.0f, 1.0f);
     float delta = dot(normalize(viewPos - vtxpos), reflect((vtxpos - lightPos), vtxnorm));
     if(delta > 0){
         vec3 specular = vec3(min(pow(delta, shininess), 1.0f));
-        //vec3 specular = vec3(0);
         FragColor =  vec4(ambient + min((diffuse + specular), vec3(1, 1, 1)) * lightColor, 1.0f);
     }
     else{
         FragColor = vec4(ambient + diffuse * lightColor, 1.0f);
     }
-    //FragColor = vec4(vtxnorm.x, vtxnorm.y, vtxnorm.z, 1.0);
 }

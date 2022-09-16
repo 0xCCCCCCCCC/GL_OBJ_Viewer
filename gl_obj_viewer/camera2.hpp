@@ -126,8 +126,6 @@ public:
 
     void updateCameraVectors(void);
     
-    void updateCameraTransform(void);
-    
     void set(float* yaw, float* pitch, float* roll, float* zoom,
              float* transfront, float* transup, float* transright, float* distance);
     

@@ -16,8 +16,9 @@ ImGuiPanel::ImGuiPanel(void){
     
     enable_mouse = false;
     display_mode = GL_FILL;
-    yaw = 0;
-    pitch = 0;
+    show_coord = true;
+    yaw = M_PI / 6;
+    pitch = M_PI / 9;
     roll = 0;
     SCALE = 1;
     front = 0;
@@ -47,6 +48,7 @@ void ImGuiPanel::Panel(void){
         ImGui::SameLine();
         if (ImGui::RadioButton("linear", display_mode == GL_LINE))
             display_mode = GL_LINE;
+        ImGui::Checkbox("show coordinate", &show_coord);
     }
     // 场景旋转，旋转的三个参数为欧拉角参数，单击按钮后旋转重置
     if(ImGui::CollapsingHeader("Camera Condition")){

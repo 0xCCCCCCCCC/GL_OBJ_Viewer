@@ -16,6 +16,7 @@ vector<string> _data_objpath;
 vector<vector<float>*> _data_objdata_v;
 vector<vector<unsigned int>*> _data_objdata_f;
 vector<vector<float>*> _data_objdata_vn;
+std::vector<glm::vec3> _data_objdata_center;
 
 vector<float> _data_local_v;
 vector<unsigned int> _data_local_f;
@@ -28,6 +29,67 @@ glm::mat4 _data_temp_trans;
 
 unsigned int _local_pt_cnt = 0;
 
+float _data_coord[] = {
+    -1.0f, .0f,   .0f,   -1.0f, 1.0f,  .0f,   -1.0f, .0f,   -1.0f, -1.0f, .0f,
+    1.0f,  -0.9f, .0f,   .0f,   -0.9f, 1.0f,  .0f,   -0.9f, .0f,   -1.0f, -0.9f,
+    .0f,   1.0f,  -0.8f, .0f,   .0f,   -0.8f, 1.0f,  .0f,   -0.8f, .0f,   -1.0f,
+    -0.8f, .0f,   1.0f,  -0.7f, .0f,   .0f,   -0.7f, 1.0f,  .0f,   -0.7f, .0f,
+    -1.0f, -0.7f, .0f,   1.0f,  -0.6f, .0f,   .0f,   -0.6f, 1.0f,  .0f,   -0.6f,
+    .0f,   -1.0f, -0.6f, .0f,   1.0f,  -0.5f, .0f,   .0f,   -0.5f, 1.0f,  .0f,
+    -0.5f, .0f,   -1.0f, -0.5f, .0f,   1.0f,  -0.4f, .0f,   .0f,   -0.4f, 1.0f,
+    .0f,   -0.4f, .0f,   -1.0f, -0.4f, .0f,   1.0f,  -0.3f, .0f,   .0f,   -0.3f,
+    1.0f,  .0f,   -0.3f, .0f,   -1.0f, -0.3f, .0f,   1.0f,  -0.2f, .0f,   .0f,
+    -0.2f, 1.0f,  .0f,   -0.2f, .0f,   -1.0f, -0.2f, .0f,   1.0f,  -0.1f, .0f,
+    .0f,   -0.1f, 1.0f,  .0f,   -0.1f, .0f,   -1.0f, -0.1f, .0f,   1.0f,  0.0f,
+    .0f,   .0f,   0.0f,  1.0f,  .0f,   0.0f,  .0f,   -1.0f, 0.0f,  .0f,   1.0f,
+    0.1f,  .0f,   .0f,   0.1f,  1.0f,  .0f,   0.1f,  .0f,   -1.0f, 0.1f,  .0f,
+    1.0f,  0.2f,  .0f,   .0f,   0.2f,  1.0f,  .0f,   0.2f,  .0f,   -1.0f, 0.2f,
+    .0f,   1.0f,  0.3f,  .0f,   .0f,   0.3f,  1.0f,  .0f,   0.3f,  .0f,   -1.0f,
+    0.3f,  .0f,   1.0f,  0.4f,  .0f,   .0f,   0.4f,  1.0f,  .0f,   0.4f,  .0f,
+    -1.0f, 0.4f,  .0f,   1.0f,  0.5f,  .0f,   .0f,   0.5f,  1.0f,  .0f,   0.5f,
+    .0f,   -1.0f, 0.5f,  .0f,   1.0f,  0.6f,  .0f,   .0f,   0.6f,  1.0f,  .0f,
+    0.6f,  .0f,   -1.0f, 0.6f,  .0f,   1.0f,  0.7f,  .0f,   .0f,   0.7f,  1.0f,
+    .0f,   0.7f,  .0f,   -1.0f, 0.7f,  .0f,   1.0f,  0.8f,  .0f,   .0f,   0.8f,
+    1.0f,  .0f,   0.8f,  .0f,   -1.0f, 0.8f,  .0f,   1.0f,  0.9f,  .0f,   .0f,
+    0.9f,  1.0f,  .0f,   0.9f,  .0f,   -1.0f, 0.9f,  .0f,   1.0f,  1.0f,  .0f,
+    .0f,   1.0f,  1.0f,  .0f,   1.0f,  .0f,   -1.0f, 1.0f,  .0f,   1.0f,  -1.0f,
+    0.0f,  .0f,   1.0f,  0.0f,  .0f,   .0f,   0.0f,  -1.0f, .0f,   0.0f,  1.0f,
+    -1.0f, 0.1f,  .0f,   1.0f,  0.1f,  .0f,   .0f,   0.1f,  -1.0f, .0f,   0.1f,
+    1.0f,  -1.0f, 0.2f,  .0f,   1.0f,  0.2f,  .0f,   .0f,   0.2f,  -1.0f, .0f,
+    0.2f,  1.0f,  -1.0f, 0.3f,  .0f,   1.0f,  0.3f,  .0f,   .0f,   0.3f,  -1.0f,
+    .0f,   0.3f,  1.0f,  -1.0f, 0.4f,  .0f,   1.0f,  0.4f,  .0f,   .0f,   0.4f,
+    -1.0f, .0f,   0.4f,  1.0f,  -1.0f, 0.5f,  .0f,   1.0f,  0.5f,  .0f,   .0f,
+    0.5f,  -1.0f, .0f,   0.5f,  1.0f,  -1.0f, 0.6f,  .0f,   1.0f,  0.6f,  .0f,
+    .0f,   0.6f,  -1.0f, .0f,   0.6f,  1.0f,  -1.0f, 0.7f,  .0f,   1.0f,  0.7f,
+    .0f,   .0f,   0.7f,  -1.0f, .0f,   0.7f,  1.0f,  -1.0f, 0.8f,  .0f,   1.0f,
+    0.8f,  .0f,   .0f,   0.8f,  -1.0f, .0f,   0.8f,  1.0f,  -1.0f, 0.9f,  .0f,
+    1.0f,  0.9f,  .0f,   .0f,   0.9f,  -1.0f, .0f,   0.9f,  1.0f,  -1.0f, 1.0f,
+    .0f,   1.0f,  1.0f,  .0f,   .0f,   1.0f,  -1.0f, .0f,   1.0f,  1.0f,  -1.0f,
+    .0f,   -1.0f, 1.0f,  .0f,   -1.0f, .0f,   .0f,   -1.0f, .0f,   1.0f,  -1.0f,
+    -1.0f, .0f,   -0.9f, 1.0f,  .0f,   -0.9f, .0f,   .0f,   -0.9f, .0f,   1.0f,
+    -0.9f, -1.0f, .0f,   -0.8f, 1.0f,  .0f,   -0.8f, .0f,   .0f,   -0.8f, .0f,
+    1.0f,  -0.8f, -1.0f, .0f,   -0.7f, 1.0f,  .0f,   -0.7f, .0f,   .0f,   -0.7f,
+    .0f,   1.0f,  -0.7f, -1.0f, .0f,   -0.6f, 1.0f,  .0f,   -0.6f, .0f,   .0f,
+    -0.6f, .0f,   1.0f,  -0.6f, -1.0f, .0f,   -0.5f, 1.0f,  .0f,   -0.5f, .0f,
+    .0f,   -0.5f, .0f,   1.0f,  -0.5f, -1.0f, .0f,   -0.4f, 1.0f,  .0f,   -0.4f,
+    .0f,   .0f,   -0.4f, .0f,   1.0f,  -0.4f, -1.0f, .0f,   -0.3f, 1.0f,  .0f,
+    -0.3f, .0f,   .0f,   -0.3f, .0f,   1.0f,  -0.3f, -1.0f, .0f,   -0.2f, 1.0f,
+    .0f,   -0.2f, .0f,   .0f,   -0.2f, .0f,   1.0f,  -0.2f, -1.0f, .0f,   -0.1f,
+    1.0f,  .0f,   -0.1f, .0f,   .0f,   -0.1f, .0f,   1.0f,  -0.1f, -1.0f, .0f,
+    0.0f,  1.0f,  .0f,   0.0f,  .0f,   .0f,   0.0f,  .0f,   1.0f,  0.0f,  -1.0f,
+    .0f,   0.1f,  1.0f,  .0f,   0.1f,  .0f,   .0f,   0.1f,  .0f,   1.0f,  0.1f,
+    -1.0f, .0f,   0.2f,  1.0f,  .0f,   0.2f,  .0f,   .0f,   0.2f,  .0f,   1.0f,
+    0.2f,  -1.0f, .0f,   0.3f,  1.0f,  .0f,   0.3f,  .0f,   .0f,   0.3f,  .0f,
+    1.0f,  0.3f,  -1.0f, .0f,   0.4f,  1.0f,  .0f,   0.4f,  .0f,   .0f,   0.4f,
+    .0f,   1.0f,  0.4f,  -1.0f, .0f,   0.5f,  1.0f,  .0f,   0.5f,  .0f,   .0f,
+    0.5f,  .0f,   1.0f,  0.5f,  -1.0f, .0f,   0.6f,  1.0f,  .0f,   0.6f,  .0f,
+    .0f,   0.6f,  .0f,   1.0f,  0.6f,  -1.0f, .0f,   0.7f,  1.0f,  .0f,   0.7f,
+    .0f,   .0f,   0.7f,  .0f,   1.0f,  0.7f,  -1.0f, .0f,   0.8f,  1.0f,  .0f,
+    0.8f,  .0f,   .0f,   0.8f,  .0f,   1.0f,  0.8f,  -1.0f, .0f,   0.9f,  1.0f,
+    .0f,   0.9f,  .0f,   .0f,   0.9f,  .0f,   1.0f,  0.9f,  -1.0f, .0f,   1.0f,
+    1.0f,  .0f,   1.0f,  .0f,   .0f,   1.0f,  .0f,   1.0f,  1.0f
+};
+
 void _data_removeData(int objid){
     _data_objdata_v[objid]->clear();
     _data_objdata_f[objid]->clear();
@@ -38,6 +100,7 @@ void _data_removeData(int objid){
     _data_objdata_v.erase(_data_objdata_v.begin() + objid);
     _data_objdata_f.erase(_data_objdata_f.begin() + objid);
     _data_objdata_vn.erase(_data_objdata_vn.begin() + objid);
+    _data_objdata_center.erase(_data_objdata_center.begin() + objid);
     _data_updateLocal();
 }
 
@@ -55,6 +118,7 @@ bool _data_manageData(int objcmd, int objid, glm::mat4 transmat){
                 _data_objdata_v.push_back(new vector<float>);
                 _data_objdata_f.push_back(new vector<unsigned int>);
                 _data_objdata_vn.push_back(new vector<float>);
+                _data_objdata_center.push_back(glm::vec3(.0f, .0f, .0f));
                 if(_data_loader.get(_data_objdata_v[objid], _data_objdata_f[objid], _data_objdata_vn[objid])){
                     printf("insert %i\n", objid);
                     /*

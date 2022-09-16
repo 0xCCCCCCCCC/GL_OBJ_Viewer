@@ -23,10 +23,13 @@ extern std::vector<std::string> _data_objpath;
 extern std::vector<std::vector<float>*> _data_objdata_v;
 extern std::vector<std::vector<unsigned int>*> _data_objdata_f;
 extern std::vector<std::vector<float>*> _data_objdata_vn;
+extern std::vector<glm::vec3> _data_objdata_center;
 
 extern std::vector<float> _data_local_v;
 extern std::vector<unsigned int> _data_local_f;
 //extern std::vector<float> _data_local_vn;
+
+extern float _data_coord[];
 
 extern Loader _data_loader;
 
@@ -59,6 +62,10 @@ void _data_clearAll(void);
 //#define getLocalVNSize ((_data_local_vn.size()) * sizeof(float))
 //#define getLocalVNPtr (&(_data_local_vn[0]))
 #define getLocalPtCount ((unsigned int)(_local_pt_cnt))
+
+#define getCoordPtr (_data_coord)
+#define getCoordSize ((636) * (sizeof(float)))
+#define getCoordCnt (636)
 
 #define getHandler (_data_manageData)
 

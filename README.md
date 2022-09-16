@@ -58,7 +58,7 @@ vec3 ambient = vec3(.5f, .5f, .5f) * ambientStrength;
 
 漫反射由入射光线与法线的夹角、光照与物体的颜色有关。在本项目中将物体的颜色默认为 *\#ffffff* ，入射光线与法向量的夹角的余弦值由光线方向与法线向量（均为单位向量）的点乘表示。在片元着色器中漫反射的实现如下：
 
-```
+```glsl
 uniform vec3 lightPos;
 ...
 vec3 diffuse = max(dot((vtxpos - lightPos), vtxnorm), .0f) * vec3(1.0f, 1.0f, 1.0f);
