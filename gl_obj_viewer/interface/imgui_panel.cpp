@@ -17,7 +17,7 @@ ImGuiPanel::ImGuiPanel(void){
     enable_mouse = false;
     display_mode = GL_FILL;
     show_coord = true;
-    yaw = M_PI / 6;
+    yaw = -M_PI / 6;
     pitch = M_PI / 9;
     roll = 0;
     SCALE = 1;

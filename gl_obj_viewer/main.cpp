@@ -75,6 +75,9 @@ int main(int argc, char * argv[]){
     Shader shader = shaderCreate("shader/vertex_shader.vert", "shader/fragment_shader.frag");
     Shader coord_shader = shaderCreate("shader/coord_shader_v.vert", "shader/coord_shader_f.frag");
     
+    //初始化坐标系
+    genCoord(1.0f);
+    
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -104,7 +107,7 @@ int main(int argc, char * argv[]){
     glBindVertexArray(0);
 
     // 场景中当前Vertex的数量，用于判断是否新增obj模型
-    unsigned int local_pt_cnt = 0;
+    //unsigned int local_pt_cnt = 0;
     
     //glEnable(GL_CULL_FACE);
     // 开启深度测试
@@ -119,7 +122,7 @@ int main(int argc, char * argv[]){
         processInput(window);
         
         // 当场景中新增obj模型时，重新绑定VBO与EBO
-        if(getIfTransform || getLocalPtCount != local_pt_cnt){
+        if(getIfTransform /*|| getLocalPtCount != local_pt_cnt*/){
             glBindVertexArray(VAO);
             glBindBuffer(GL_ARRAY_BUFFER, VBO);
             glBufferData(GL_ARRAY_BUFFER, getLocalVtxSize, getLocalVtxPtr, GL_STATIC_DRAW);
@@ -128,7 +131,7 @@ int main(int argc, char * argv[]){
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             glBindVertexArray(0);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-            local_pt_cnt = getLocalPtCount;
+            //local_pt_cnt = getLocalPtCount;
             localTransformComplete();
         }
         // 将观察矩阵等参数传入着色器程序

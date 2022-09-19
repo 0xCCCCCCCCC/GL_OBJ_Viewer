@@ -5,7 +5,7 @@
  - 基于imgui的图形界面
  - 从本地导入obj模型并显示（目前仅完成了macOS的该功能，Windows的本地导入正在开发中）
  - 使用滚动条的相机视角的变换
- - obj文件导入后的移动、旋转、缩放等变换操作（正在开发中）
+ - obj文件导入后的移动、旋转、缩放等变换操作
 
 ---
 
@@ -15,7 +15,7 @@
 
  ![obj_file_display](sample/sample1.png)
 
- - 图形界面展示
+ - 图形界面与坐标系展示
 
  ![graphic_ui](sample/sample2.png)
 
@@ -29,11 +29,11 @@
 
  - 导入多个obj文件并展示
 
- ![multiple_obj_files]()
+ ![multiple_obj_files](sample/sample5.png)
 
  - obj模型的移动、缩放、旋转变换
 
- ![obj_model_transform]()
+ ![obj_model_transform](sample/sample6.png)
 
 ---
 ## 2. 原理说明
@@ -207,7 +207,77 @@ bool Loader::calc_vn(void){
 }
 ```
 
-### 4. 图形界面的实现
+### 4. 模型移动、旋转、缩放的实现
+用户可通过拖拽obj面板中的移动、旋转、缩放滚动条以移动、旋转、缩放选中的obj文件；当旋转、缩放、移动操作完毕后，点击`Apply`按钮以对该模型应用移动、旋转、缩放变换；点击`Cancel`按钮以取消对该模型的变换，使其回到变换前的状态。
+
+模型变换功能的实现位于类`ObjPanel`中，该类在用户拖拽移动、缩放、旋转滚动条时，根据当前的移动、缩放、旋转状态参数计算当前的变换矩阵，并传入主程序；
+
+```cpp
+void ObjPanel::_calc_trans_mat(void){
+    glm::mat4 _trans_mat(1.0f);
+    _trans_mat = glm::rotate(_trans_mat, this->obj_yaw, glm::vec3(0, 0, 1));
+    _trans_mat = glm::rotate(_trans_mat, this->obj_pitch, glm::vec3(0, 1, 0));
+    _trans_mat = glm::rotate(_trans_mat, this->obj_roll, glm::vec3(1, 0, 0));
+    float _obj_scale = pow(10, this->obj_scale);
+    _trans_mat = glm::scale(_trans_mat, glm::vec3(_obj_scale, _obj_scale, _obj_scale));
+    _trans_mat[0][3] = this->obj_x;
+    _trans_mat[1][3] = this->obj_y;
+    _trans_mat[2][3] = this->obj_z;
+    
+    this->obj_trans = _trans_mat;
+    op(OBJ_TRANSFORM, obj_selected, obj_trans);
+}
+```
+
+当用户正在预览变换而未应用/取消变换时，主程序将变换矩阵临时存储，并对对应模型的坐标、法向量数据临时应用该变换矩阵，以实现预览变换效果而不对模型数据本身进行更改；
+
+```cpp
+if(objid == transid){
+    for(int vid = 0; vid<_data_objdata_v[objid]->size() / 3; vid++ ){
+        glm::vec4 former_v((*(_data_objdata_v[objid]))[3 * vid],
+                            (*(_data_objdata_v[objid]))[3 * vid + 1],
+                            (*(_data_objdata_v[objid]))[3 * vid + 2], 1.0f);
+        glm::vec4 trans_v = former_v * _data_temp_trans;
+        glm::vec3 former_vn((*(_data_objdata_vn[objid]))[3 * vid],
+                            (*(_data_objdata_vn[objid]))[3 * vid + 1],
+                            (*(_data_objdata_vn[objid]))[3 * vid + 2]);
+        glm::vec3 trans_vn = glm::normalize(glm::vec3(former_vn * glm::mat3(_data_temp_trans)));
+        _data_local_v.push_back(trans_v[0]);
+        _data_local_v.push_back(trans_v[1]);
+        _data_local_v.push_back(trans_v[2]);
+        _data_local_v.push_back(trans_vn[0]);
+        _data_local_v.push_back(trans_vn[1]);
+        _data_local_v.push_back(trans_vn[2]);
+    }
+}
+```
+
+当用户点击`Apply`按钮进行应用变换后，主程序将变换矩阵与主程序中该模型的坐标数据相乘，将坐标数据更改为应用变换后的数据；当用户点击`Cancel`按钮后，主程序清空变换矩阵，并停止变换预览，以取消变换。
+
+```cpp
+void _data_useTransform(int objid){
+    for(int vid = 0; vid<_data_objdata_v[objid]->size() / 3; vid++ ){
+        glm::vec4 former_v((*(_data_objdata_v[objid]))[3 * vid],
+                           (*(_data_objdata_v[objid]))[3 * vid + 1],
+                           (*(_data_objdata_v[objid]))[3 * vid + 2], 1.0f);
+        glm::vec4 trans_v = former_v * _data_temp_trans;
+        glm::vec3 former_vn((*(_data_objdata_vn[objid]))[3 * vid],
+                           (*(_data_objdata_vn[objid]))[3 * vid + 1],
+                           (*(_data_objdata_vn[objid]))[3 * vid + 2]);
+        glm::vec3 trans_vn = glm::normalize(glm::vec3(former_vn * glm::mat3(_data_temp_trans)));
+        (*_data_objdata_v[objid])[3 * vid] = trans_v[0];
+        (*_data_objdata_v[objid])[3 * vid + 1] = trans_v[1];
+        (*_data_objdata_v[objid])[3 * vid + 2] = trans_v[2];
+        (*_data_objdata_vn[objid])[3 * vid] = trans_vn[0];
+        (*_data_objdata_vn[objid])[3 * vid + 1] = trans_vn[1];
+        (*_data_objdata_vn[objid])[3 * vid + 2] = trans_vn[2];
+    }
+    _data_temp_trans = glm::mat4(0);
+    _data_is_transforming = true;
+}
+```
+
+### 5. 图形界面的实现
 
 图形界面的实现使用了 [imgui](https://github.com/ocornut/imgui) 。本项目使用imgui构建了3个面板，分别为相机变换面板、obj面板和文件导入面板。
 

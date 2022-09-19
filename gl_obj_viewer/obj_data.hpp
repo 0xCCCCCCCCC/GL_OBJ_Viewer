@@ -29,7 +29,7 @@ extern std::vector<float> _data_local_v;
 extern std::vector<unsigned int> _data_local_f;
 //extern std::vector<float> _data_local_vn;
 
-extern float _data_coord[];
+extern float _data_coord[636];
 
 extern Loader _data_loader;
 
@@ -47,6 +47,8 @@ void _data_useTransform(int objid);
 void _data_clearAll(void);
 
 void _data_TransComplete(void);
+
+void _data_genCoord(int fov);
 
 #define getObjPath (&(_data_objpath))
 #define getObjName (&(_data_objname))
@@ -72,6 +74,8 @@ void _data_TransComplete(void);
 #define getCoordPtr (_data_coord)
 #define getCoordSize ((636) * (sizeof(float)))
 #define getCoordCnt (636)
+
+#define genCoord _data_genCoord
 
 #define getHandler (_data_manageData)
 

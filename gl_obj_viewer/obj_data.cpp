@@ -30,66 +30,7 @@ bool _data_is_transforming = false;
 
 unsigned int _local_pt_cnt = 0;
 
-float _data_coord[] = {
-    -1.0f, .0f,   .0f,   -1.0f, 1.0f,  .0f,   -1.0f, .0f,   -1.0f, -1.0f, .0f,
-    1.0f,  -0.9f, .0f,   .0f,   -0.9f, 1.0f,  .0f,   -0.9f, .0f,   -1.0f, -0.9f,
-    .0f,   1.0f,  -0.8f, .0f,   .0f,   -0.8f, 1.0f,  .0f,   -0.8f, .0f,   -1.0f,
-    -0.8f, .0f,   1.0f,  -0.7f, .0f,   .0f,   -0.7f, 1.0f,  .0f,   -0.7f, .0f,
-    -1.0f, -0.7f, .0f,   1.0f,  -0.6f, .0f,   .0f,   -0.6f, 1.0f,  .0f,   -0.6f,
-    .0f,   -1.0f, -0.6f, .0f,   1.0f,  -0.5f, .0f,   .0f,   -0.5f, 1.0f,  .0f,
-    -0.5f, .0f,   -1.0f, -0.5f, .0f,   1.0f,  -0.4f, .0f,   .0f,   -0.4f, 1.0f,
-    .0f,   -0.4f, .0f,   -1.0f, -0.4f, .0f,   1.0f,  -0.3f, .0f,   .0f,   -0.3f,
-    1.0f,  .0f,   -0.3f, .0f,   -1.0f, -0.3f, .0f,   1.0f,  -0.2f, .0f,   .0f,
-    -0.2f, 1.0f,  .0f,   -0.2f, .0f,   -1.0f, -0.2f, .0f,   1.0f,  -0.1f, .0f,
-    .0f,   -0.1f, 1.0f,  .0f,   -0.1f, .0f,   -1.0f, -0.1f, .0f,   1.0f,  0.0f,
-    .0f,   .0f,   0.0f,  1.0f,  .0f,   0.0f,  .0f,   -1.0f, 0.0f,  .0f,   1.0f,
-    0.1f,  .0f,   .0f,   0.1f,  1.0f,  .0f,   0.1f,  .0f,   -1.0f, 0.1f,  .0f,
-    1.0f,  0.2f,  .0f,   .0f,   0.2f,  1.0f,  .0f,   0.2f,  .0f,   -1.0f, 0.2f,
-    .0f,   1.0f,  0.3f,  .0f,   .0f,   0.3f,  1.0f,  .0f,   0.3f,  .0f,   -1.0f,
-    0.3f,  .0f,   1.0f,  0.4f,  .0f,   .0f,   0.4f,  1.0f,  .0f,   0.4f,  .0f,
-    -1.0f, 0.4f,  .0f,   1.0f,  0.5f,  .0f,   .0f,   0.5f,  1.0f,  .0f,   0.5f,
-    .0f,   -1.0f, 0.5f,  .0f,   1.0f,  0.6f,  .0f,   .0f,   0.6f,  1.0f,  .0f,
-    0.6f,  .0f,   -1.0f, 0.6f,  .0f,   1.0f,  0.7f,  .0f,   .0f,   0.7f,  1.0f,
-    .0f,   0.7f,  .0f,   -1.0f, 0.7f,  .0f,   1.0f,  0.8f,  .0f,   .0f,   0.8f,
-    1.0f,  .0f,   0.8f,  .0f,   -1.0f, 0.8f,  .0f,   1.0f,  0.9f,  .0f,   .0f,
-    0.9f,  1.0f,  .0f,   0.9f,  .0f,   -1.0f, 0.9f,  .0f,   1.0f,  1.0f,  .0f,
-    .0f,   1.0f,  1.0f,  .0f,   1.0f,  .0f,   -1.0f, 1.0f,  .0f,   1.0f,  -1.0f,
-    0.0f,  .0f,   1.0f,  0.0f,  .0f,   .0f,   0.0f,  -1.0f, .0f,   0.0f,  1.0f,
-    -1.0f, 0.1f,  .0f,   1.0f,  0.1f,  .0f,   .0f,   0.1f,  -1.0f, .0f,   0.1f,
-    1.0f,  -1.0f, 0.2f,  .0f,   1.0f,  0.2f,  .0f,   .0f,   0.2f,  -1.0f, .0f,
-    0.2f,  1.0f,  -1.0f, 0.3f,  .0f,   1.0f,  0.3f,  .0f,   .0f,   0.3f,  -1.0f,
-    .0f,   0.3f,  1.0f,  -1.0f, 0.4f,  .0f,   1.0f,  0.4f,  .0f,   .0f,   0.4f,
-    -1.0f, .0f,   0.4f,  1.0f,  -1.0f, 0.5f,  .0f,   1.0f,  0.5f,  .0f,   .0f,
-    0.5f,  -1.0f, .0f,   0.5f,  1.0f,  -1.0f, 0.6f,  .0f,   1.0f,  0.6f,  .0f,
-    .0f,   0.6f,  -1.0f, .0f,   0.6f,  1.0f,  -1.0f, 0.7f,  .0f,   1.0f,  0.7f,
-    .0f,   .0f,   0.7f,  -1.0f, .0f,   0.7f,  1.0f,  -1.0f, 0.8f,  .0f,   1.0f,
-    0.8f,  .0f,   .0f,   0.8f,  -1.0f, .0f,   0.8f,  1.0f,  -1.0f, 0.9f,  .0f,
-    1.0f,  0.9f,  .0f,   .0f,   0.9f,  -1.0f, .0f,   0.9f,  1.0f,  -1.0f, 1.0f,
-    .0f,   1.0f,  1.0f,  .0f,   .0f,   1.0f,  -1.0f, .0f,   1.0f,  1.0f,  -1.0f,
-    .0f,   -1.0f, 1.0f,  .0f,   -1.0f, .0f,   .0f,   -1.0f, .0f,   1.0f,  -1.0f,
-    -1.0f, .0f,   -0.9f, 1.0f,  .0f,   -0.9f, .0f,   .0f,   -0.9f, .0f,   1.0f,
-    -0.9f, -1.0f, .0f,   -0.8f, 1.0f,  .0f,   -0.8f, .0f,   .0f,   -0.8f, .0f,
-    1.0f,  -0.8f, -1.0f, .0f,   -0.7f, 1.0f,  .0f,   -0.7f, .0f,   .0f,   -0.7f,
-    .0f,   1.0f,  -0.7f, -1.0f, .0f,   -0.6f, 1.0f,  .0f,   -0.6f, .0f,   .0f,
-    -0.6f, .0f,   1.0f,  -0.6f, -1.0f, .0f,   -0.5f, 1.0f,  .0f,   -0.5f, .0f,
-    .0f,   -0.5f, .0f,   1.0f,  -0.5f, -1.0f, .0f,   -0.4f, 1.0f,  .0f,   -0.4f,
-    .0f,   .0f,   -0.4f, .0f,   1.0f,  -0.4f, -1.0f, .0f,   -0.3f, 1.0f,  .0f,
-    -0.3f, .0f,   .0f,   -0.3f, .0f,   1.0f,  -0.3f, -1.0f, .0f,   -0.2f, 1.0f,
-    .0f,   -0.2f, .0f,   .0f,   -0.2f, .0f,   1.0f,  -0.2f, -1.0f, .0f,   -0.1f,
-    1.0f,  .0f,   -0.1f, .0f,   .0f,   -0.1f, .0f,   1.0f,  -0.1f, -1.0f, .0f,
-    0.0f,  1.0f,  .0f,   0.0f,  .0f,   .0f,   0.0f,  .0f,   1.0f,  0.0f,  -1.0f,
-    .0f,   0.1f,  1.0f,  .0f,   0.1f,  .0f,   .0f,   0.1f,  .0f,   1.0f,  0.1f,
-    -1.0f, .0f,   0.2f,  1.0f,  .0f,   0.2f,  .0f,   .0f,   0.2f,  .0f,   1.0f,
-    0.2f,  -1.0f, .0f,   0.3f,  1.0f,  .0f,   0.3f,  .0f,   .0f,   0.3f,  .0f,
-    1.0f,  0.3f,  -1.0f, .0f,   0.4f,  1.0f,  .0f,   0.4f,  .0f,   .0f,   0.4f,
-    .0f,   1.0f,  0.4f,  -1.0f, .0f,   0.5f,  1.0f,  .0f,   0.5f,  .0f,   .0f,
-    0.5f,  .0f,   1.0f,  0.5f,  -1.0f, .0f,   0.6f,  1.0f,  .0f,   0.6f,  .0f,
-    .0f,   0.6f,  .0f,   1.0f,  0.6f,  -1.0f, .0f,   0.7f,  1.0f,  .0f,   0.7f,
-    .0f,   .0f,   0.7f,  .0f,   1.0f,  0.7f,  -1.0f, .0f,   0.8f,  1.0f,  .0f,
-    0.8f,  .0f,   .0f,   0.8f,  .0f,   1.0f,  0.8f,  -1.0f, .0f,   0.9f,  1.0f,
-    .0f,   0.9f,  .0f,   .0f,   0.9f,  .0f,   1.0f,  0.9f,  -1.0f, .0f,   1.0f,
-    1.0f,  .0f,   1.0f,  .0f,   .0f,   1.0f,  .0f,   1.0f,  1.0f
-};
+float _data_coord[636] = {0};
 
 // 从场景中删除指定模型
 void _data_removeData(int objid){
@@ -123,14 +64,7 @@ bool _data_manageData(int objcmd, int objid, glm::mat4 transmat){
                 _data_objdata_center.push_back(glm::vec3(.0f, .0f, .0f));
                 if(_data_loader.get(_data_objdata_v[objid], _data_objdata_f[objid], _data_objdata_vn[objid])){
                     printf("insert %i\n", objid);
-                    /*
-                    for(int i=0; i<_data_objdata_vn[objid]->size(); ++i){
-                        std::cout<<(*_data_objdata_vn[objid])[i]<<" ";
-                        if(i%3==2)
-                            std::cout<<std::endl;
-                    }
-                    std::cout<<_data_objdata_vn[objid]->size()/3<<std::endl;
-                     */
+                    _data_is_transforming = true;
                 }else{
                     // 获取obj文件数据失败则清除先前创建的用于存储相应obj文件数据的数组
                     fprintf(stderr, "failed to get data from %i\n", objid);
@@ -139,8 +73,6 @@ bool _data_manageData(int objcmd, int objid, glm::mat4 transmat){
                 }
             }else{
                 // 读取obj文件失败则在文件名以及文件路径数组中删除该文件的数据
-                //_data_objpath.erase(_data_objpath.begin() + objid);
-                //_data_objname.erase(_data_objname.begin() + objid);
                 fprintf(stderr, "invalid format!\n");
                 return false;
             }
@@ -148,6 +80,7 @@ bool _data_manageData(int objcmd, int objid, glm::mat4 transmat){
         case OBJ_REMOVE:
             printf("remove %i\n", objid);
             _data_removeData(objid);
+            _data_is_transforming = true;
             break;
         case OBJ_TRANSFORM:
             _data_use_temp_trans = true;
@@ -164,7 +97,6 @@ bool _data_manageData(int objcmd, int objid, glm::mat4 transmat){
         case OBJ_CONFIRM_TRANSFORM:
             //TODO: apply transform to objdata
             _data_use_temp_trans = false;
-            _data_temp_trans = glm::mat4(0);
             _data_useTransform(objid);
             break;
             
@@ -194,10 +126,10 @@ void _data_updateLocal(int transid){
                                        (*(_data_objdata_v[objid]))[3 * vid + 1],
                                        (*(_data_objdata_v[objid]))[3 * vid + 2], 1.0f);
                     glm::vec4 trans_v = former_v * _data_temp_trans;
-                    glm::vec4 former_vn((*(_data_objdata_vn[objid]))[3 * vid],
+                    glm::vec3 former_vn((*(_data_objdata_vn[objid]))[3 * vid],
                                        (*(_data_objdata_vn[objid]))[3 * vid + 1],
-                                       (*(_data_objdata_vn[objid]))[3 * vid + 2], 1.0f);
-                    glm::vec3 trans_vn = glm::normalize(glm::vec3(former_vn * _data_temp_trans));
+                                       (*(_data_objdata_vn[objid]))[3 * vid + 2]);
+                    glm::vec3 trans_vn = glm::normalize(glm::vec3(former_vn * glm::mat3(_data_temp_trans)));
                     _data_local_v.push_back(trans_v[0]);
                     _data_local_v.push_back(trans_v[1]);
                     _data_local_v.push_back(trans_v[2]);
@@ -247,12 +179,64 @@ void _data_updateLocal(int transid){
     _local_pt_cnt = (unsigned int)_data_local_f.size();
 }
 
+// 应用变换，将临时变换矩阵与相应模型坐标相乘，并清空变换矩阵
 void _data_useTransform(int objid){
+    for(int vid = 0; vid<_data_objdata_v[objid]->size() / 3; vid++ ){
+        glm::vec4 former_v((*(_data_objdata_v[objid]))[3 * vid],
+                           (*(_data_objdata_v[objid]))[3 * vid + 1],
+                           (*(_data_objdata_v[objid]))[3 * vid + 2], 1.0f);
+        glm::vec4 trans_v = former_v * _data_temp_trans;
+        glm::vec3 former_vn((*(_data_objdata_vn[objid]))[3 * vid],
+                           (*(_data_objdata_vn[objid]))[3 * vid + 1],
+                           (*(_data_objdata_vn[objid]))[3 * vid + 2]);
+        glm::vec3 trans_vn = glm::normalize(glm::vec3(former_vn * glm::mat3(_data_temp_trans)));
+        (*_data_objdata_v[objid])[3 * vid] = trans_v[0];
+        (*_data_objdata_v[objid])[3 * vid + 1] = trans_v[1];
+        (*_data_objdata_v[objid])[3 * vid + 2] = trans_v[2];
+        (*_data_objdata_vn[objid])[3 * vid] = trans_vn[0];
+        (*_data_objdata_vn[objid])[3 * vid + 1] = trans_vn[1];
+        (*_data_objdata_vn[objid])[3 * vid + 2] = trans_vn[2];
+    }
+    _data_temp_trans = glm::mat4(0);
     _data_is_transforming = true;
 }
 
 void _data_TransComplete(void){
     _data_is_transforming = false;
+}
+
+void _data_genCoord(int fov){
+    int _cid = 0;
+    for (float _coordx = -1.0f; _coordx < 1.1f; _coordx += .1f) {
+        _data_coord[3 * _cid++] = _coordx * fov;
+        _data_coord[3 * _cid] = _coordx * fov;
+        _data_coord[3 * _cid++ + 1] = 1.0f * fov;
+        _data_coord[3 * _cid] = _coordx * fov;
+        _data_coord[3 * _cid++ + 2] = -1.0f * fov;
+        _data_coord[3 * _cid] = _coordx * fov;
+        _data_coord[3 * _cid++ + 2] = 1.0f * fov;
+    }
+
+    for (float _coordy = .0f; _coordy < 1.1f; _coordy += .1f) {
+        _data_coord[3 * _cid] = -1.0f * fov;
+        _data_coord[3 * _cid++ + 1] = _coordy * fov;
+        _data_coord[3 * _cid] = 1.0f * fov;
+        _data_coord[3 * _cid++ + 1] = _coordy * fov;
+        _data_coord[3 * _cid + 1] = _coordy * fov;
+        _data_coord[3 * _cid++ + 2] = -1.0f * fov;
+        _data_coord[3 * _cid + 1] = _coordy * fov;
+        _data_coord[3 * _cid++ + 2] = 1.0f * fov;
+    }
+    
+    for (float _coordz = -1.0f; _coordz < 1.1f; _coordz += .1f){
+        _data_coord[3 * _cid] = -1.0f * fov;
+        _data_coord[3 * _cid++ + 2] = _coordz * fov;
+        _data_coord[3 * _cid] = 1.0f * fov;
+        _data_coord[3 * _cid++ + 2] = _coordz * fov;
+        _data_coord[3 * _cid++ + 2] = _coordz * fov;
+        _data_coord[3 * _cid + 1] = 1.0f * fov;
+        _data_coord[3 * _cid++ + 2] = _coordz * fov;
+    }
 }
 
 void _data_clearAll(void){
